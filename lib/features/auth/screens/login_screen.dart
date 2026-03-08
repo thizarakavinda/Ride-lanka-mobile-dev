@@ -6,6 +6,7 @@ import 'package:ride_lanka/features/auth/widgets/custom_divider.dart';
 import 'package:ride_lanka/features/auth/widgets/custom_textfield.dart';
 import 'package:ride_lanka/features/auth/widgets/google_button.dart';
 import 'package:ride_lanka/features/auth/widgets/header_text.dart';
+import 'package:ride_lanka/routes/app_routes.dart';
 import 'package:ride_lanka/widgets/primary_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -102,7 +103,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(height: 25),
                           const CustomDivider(),
                           const SizedBox(height: 25),
-                          const CustomTextfield(labelText: 'Email'),
+                          const CustomTextfield(
+                            labelText: 'Email',
+                            isRegister: false,
+                          ),
                           const SizedBox(height: 20),
                           const CustomTextfield(
                             labelText: 'Password',
@@ -114,7 +118,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           BottomActions(
                             title: "Don't have an account?",
                             actionText: 'Register',
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, AppRoutes.register);
+                            },
                           ),
                         ],
                       ),

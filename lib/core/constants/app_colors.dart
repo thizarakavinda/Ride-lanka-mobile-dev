@@ -11,4 +11,5 @@ class AppColors {
   static const Color dividerText = Color(0xFF6C7278);
   static const Color grey = Colors.grey;
   static const Color forgotPasswordText = Color(0xFF4D81E7);
+  static const Color errorBorder = Color(0xFFFF4D4D);
 }

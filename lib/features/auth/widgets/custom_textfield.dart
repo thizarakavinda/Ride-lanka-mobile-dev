@@ -4,10 +4,12 @@ import 'package:ride_lanka/core/constants/app_colors.dart';
 class CustomTextfield extends StatefulWidget {
   final String labelText;
   final bool isPassword;
+  final bool isRegister;
   const CustomTextfield({
     super.key,
     required this.labelText,
     this.isPassword = false,
+    this.isRegister = true,
   });
 
   @override
@@ -51,7 +53,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
                 ? IconButton(
                     icon: Icon(
                       _isObscure ? Icons.visibility_off : Icons.visibility,
-                      color: AppColors.dividerText,
+                      color: AppColors.grey,
                     ),
                     onPressed: () {
                       setState(() => _isObscure = !_isObscure);
@@ -60,7 +62,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
                 : null,
           ),
         ),
-        if (widget.isPassword)
+        if (widget.isRegister)
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Row(
