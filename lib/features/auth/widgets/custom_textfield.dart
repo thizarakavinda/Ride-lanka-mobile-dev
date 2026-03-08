@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ride_lanka/core/constants/app_colors.dart';
+import 'package:ride_lanka/routes/app_routes.dart';
 
 class CustomTextfield extends StatefulWidget {
   final String labelText;
@@ -93,7 +94,9 @@ class _CustomTextfieldState extends State<CustomTextfield> {
                   ],
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.passwordreset);
+                  },
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
                   child: const Text(
                     'Forgot password?',

@@ -3,21 +3,18 @@ import 'package:ride_lanka/core/constants/app_assets.dart';
 import 'package:ride_lanka/core/constants/app_colors.dart';
 import 'package:ride_lanka/core/constants/app_dialogs.dart';
 import 'package:ride_lanka/features/auth/widgets/bottom_actions.dart';
-import 'package:ride_lanka/features/auth/widgets/custom_divider.dart';
 import 'package:ride_lanka/features/auth/widgets/custom_textfield.dart';
-import 'package:ride_lanka/features/auth/widgets/google_button.dart';
 import 'package:ride_lanka/features/auth/widgets/header_text.dart';
-import 'package:ride_lanka/routes/app_routes.dart';
 import 'package:ride_lanka/widgets/primary_button.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class PasswordResetScreen extends StatefulWidget {
+  const PasswordResetScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<PasswordResetScreen> createState() => _PasswordResetScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _PasswordResetScreenState extends State<PasswordResetScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -65,7 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     const SizedBox(height: 20),
-
                     Container(
                       constraints: BoxConstraints(
                         maxWidth: isTablet ? 500 : double.infinity,
@@ -96,36 +92,29 @@ class _LoginScreenState extends State<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const HeaderText(
-                            h1: "Let's travel you in",
-                            h2: 'Discover Sri Lanka with every sign in',
+                            h1: "Reset your password",
+                            h2: 'Provide your email for send the password reset link',
                           ),
-                          const SizedBox(height: 25),
-                          GoogleButton(onTap: () {}),
-                          const SizedBox(height: 25),
-                          const CustomDivider(),
                           const SizedBox(height: 25),
                           const CustomTextfield(
                             labelText: 'Email',
                             isRegister: false,
                           ),
                           const SizedBox(height: 20),
-                          const CustomTextfield(
-                            labelText: 'Password',
-                            isPassword: true,
-                          ),
-                          const SizedBox(height: 25),
                           PrimaryButton(
-                            buttonText: 'Login',
+                            buttonText: 'Send',
                             onPressed: () {
-                              AppDialogs.loginFailedDialog(context);
+                              AppDialogs.passwordResetSendSuccessDialog(
+                                context,
+                              );
                             },
                           ),
                           const SizedBox(height: 15),
                           BottomActions(
-                            title: "Don't have an account?",
-                            actionText: 'Register',
+                            title: 'Remember Me?',
+                            actionText: 'Login',
                             onPressed: () {
-                              Navigator.pushNamed(context, AppRoutes.register);
+                              Navigator.pop(context);
                             },
                           ),
                         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ride_lanka/core/constants/app_assets.dart';
 import 'package:ride_lanka/core/constants/app_colors.dart';
+import 'package:ride_lanka/core/constants/app_dialogs.dart';
 import 'package:ride_lanka/features/auth/widgets/bottom_actions.dart';
 import 'package:ride_lanka/features/auth/widgets/country_code_phone.dart';
 import 'package:ride_lanka/features/auth/widgets/custom_textfield.dart';
@@ -142,7 +143,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                             PrimaryButton(
                               buttonText: 'Register',
-                              onPressed: () {},
+                              onPressed: () {
+                                AppDialogs.registerSuccessDialog(context);
+                              },
                             ),
                             const SizedBox(height: 15),
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ride_lanka/features/auth/screens/login_screen.dart';
+import 'package:ride_lanka/features/auth/screens/password_reset_screen.dart';
 import 'package:ride_lanka/features/auth/screens/register_screen.dart';
 import 'package:ride_lanka/features/splash/screens/land_screen.dart';
 import 'package:ride_lanka/features/splash/screens/splash_screen.dart';
@@ -11,11 +12,13 @@ class AppRoutes {
   static const String land = '/land';
   static const String login = '/login';
   static const String register = '/register';
+  static const String passwordreset = 'passwordreset';
 
   static Map<String, WidgetBuilder> routes = {
     splash: (context) => const SplashScreen(),
     land: (context) => const LandScreen(),
     login: (context) => const LoginScreen(),
     register: (context) => const RegisterScreen(),
+    passwordreset: (context) => const PasswordResetScreen(),
   };
 }
