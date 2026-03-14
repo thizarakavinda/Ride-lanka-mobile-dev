@@ -116,7 +116,7 @@ class AuthController extends ChangeNotifier {
       );
 
       if (user == null && context.mounted) {
-        Logger().e("Login Failed: User is null");
+        AppDialogs.loginErrorDialog(context);
         return;
       }
       Navigator.pushNamedAndRemoveUntil(
