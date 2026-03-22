@@ -37,7 +37,7 @@ class _MetaDataScreenState extends State<MetaDataScreen> {
     bool step3Done = provider.budget != null;
 
     Color getColor(bool completed) =>
-        completed ? AppColors.stepDivider : AppColors.chipBackground;
+        completed ? AppColors.primaryColor : AppColors.chipBackground;
 
     return Row(
       children: [
@@ -258,9 +258,11 @@ class _MetaDataScreenState extends State<MetaDataScreen> {
                           const SizedBox(height: 40),
 
                           provider.isLoading
-                              ? const Center(child: CircularProgressIndicator(
-                                  color: AppColors.primaryColor,
-                              ))
+                              ? const Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.primaryColor,
+                                  ),
+                                )
                               : PrimaryButton(
                                   buttonText: 'Continue',
                                   onPressed: provider.isValid

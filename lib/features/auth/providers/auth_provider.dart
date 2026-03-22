@@ -34,6 +34,18 @@ class AuthController extends ChangeNotifier {
   TextEditingController get confirmPasswordController =>
       _confirmPasswordController;
 
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _dobController.dispose();
+    _phoneNumberController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   void clearControllers() {
     _firstNameController.clear();
     _lastNameController.clear();
@@ -44,6 +56,7 @@ class AuthController extends ChangeNotifier {
     _confirmPasswordController.clear();
   }
 
+ 
   Future<void> signUp(BuildContext context) async {
     try {
       if (Validators.isEmpty(_firstNameController.text) ||
@@ -53,100 +66,108 @@ class AuthController extends ChangeNotifier {
           Validators.isEmpty(_phoneNumberController.text) ||
           Validators.isEmpty(_passwordController.text) ||
           Validators.isEmpty(_confirmPasswordController.text)) {
-        throw Exception("Please fill all fields");
+        throw Exception('Please fill all fields');
       }
-
       if (!Validators.isValidEmail(_emailController.text)) {
-        throw Exception("Invalid email");
+        throw Exception('Invalid email');
       }
-
       if (!Validators.isValidPassword(_passwordController.text)) {
-        throw Exception("Weak password");
+        throw Exception('Weak password');
       }
-
       if (!Validators.doPasswordsMatch(
         _passwordController.text,
         _confirmPasswordController.text,
       )) {
-        throw Exception("Passwords do not match");
+        throw Exception('Passwords do not match');
       }
 
       _isLoading = true;
       notifyListeners();
 
       final user = await _authService.registerUser(
-        email: _emailController.text,
+        email: _emailController.text.trim(),
         password: _passwordController.text,
       );
 
-      if (user == null && context.mounted) {
-        AppDialogs.registerFailedDialog(context);
+      if (user == null) {
+        if (context.mounted) AppDialogs.registerFailedDialog(context);
         return;
       }
 
-      Navigator.pushReplacementNamed(context, AppRoutes.metadata);
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, AppRoutes.metadata);
+      }
     } catch (e) {
-      Logger().e(e);
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
+      Logger().e('signUp error: $e');
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.toString())));
+      }
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
+
 
   Future<void> signIn(BuildContext context) async {
     try {
       if (Validators.isEmpty(_emailController.text) ||
           Validators.isEmpty(_passwordController.text)) {
-        throw Exception("Please fill all fields");
+        throw Exception('Please fill all fields');
       }
       if (!Validators.isValidEmail(_emailController.text)) {
-        throw Exception("Invalid email");
+        throw Exception('Invalid email');
       }
+
       _isLoading = true;
       notifyListeners();
 
-      final user = await AuthService().signInUser(
-        email: _emailController.text,
+      final user = await _authService.signInUser(
+        email: _emailController.text.trim(),
         password: _passwordController.text,
         context: context,
       );
 
-      if (user == null && context.mounted) {
-        AppDialogs.loginErrorDialog(context);
+      if (user == null) {
+        if (context.mounted) AppDialogs.loginFailedDialog(context);
         return;
       }
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.homeBottomNav,
-        (route) => false,
-      );
-    } catch (error) {
-      Logger().e("Login Error: $error");
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(error.toString())));
+      if (context.mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.homeBottomNav,
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      Logger().e('signIn error: $e');
+      if (context.mounted) {
+        AppDialogs.loginErrorDialog(context);
+      }
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
+
   Future<void> signOut(BuildContext context) async {
     try {
       await _authService.signOutUser();
       clearControllers();
-      Navigator.pushReplacementNamed(context, AppRoutes.login);
-    } catch (error) {
-      Logger().e("Sign Out Error: $error");
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(error.toString())));
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
+      }
+    } catch (e) {
+      Logger().e('signOut error: $e');
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.toString())));
+      }
     }
   }
 }

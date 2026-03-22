@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import 'package:ride_lanka/core/constants/app_dialogs.dart';
 import 'package:ride_lanka/features/auth/models/user_model.dart';
 import 'package:ride_lanka/features/auth/providers/auth_provider.dart';
 import 'package:ride_lanka/features/auth/services/auth_service.dart';
-import 'package:provider/provider.dart';
 import 'package:ride_lanka/routes/app_routes.dart';
 
 class MetaDataProvider extends ChangeNotifier {
@@ -44,43 +45,45 @@ class MetaDataProvider extends ChangeNotifier {
       _isLoading = true;
       notifyListeners();
 
-      final authProvider = Provider.of<AuthController>(context, listen: false);
       final firebaseUser = FirebaseAuth.instance.currentUser;
+      if (firebaseUser == null) throw Exception('User not found');
 
-      if (firebaseUser == null) {
-        throw Exception("User not found");
-      }
+      final authController = Provider.of<AuthController>(
+        context,
+        listen: false,
+      );
 
       final user = UserModel(
         uid: firebaseUser.uid,
-        firstName: authProvider.firstNameController.text,
-        lastName: authProvider.lastNameController.text,
-        email: authProvider.emailController.text,
-        dob: authProvider.dobController.text,
-        phone: authProvider.phoneNumberController.text,
+        firstName: authController.firstNameController.text.trim(),
+        lastName: authController.lastNameController.text.trim(),
+        email: authController.emailController.text.trim(),
+        dob: authController.dobController.text.trim(),
+        phone: authController.phoneNumberController.text.trim(),
         interests: selectedInterests,
         travelType: travelType!,
         budget: budget!,
         createdAt: DateTime.now(),
       );
 
-      await _authService.saveUser(user);
+      await _authService.saveProfile(user);
 
-     
       _isLoading = false;
       notifyListeners();
 
-     
       await Future.delayed(const Duration(milliseconds: 100));
 
-      Navigator.of(
-        context,
-      ).pushNamedAndRemoveUntil(AppRoutes.homeBottomNav, (route) => false);
-      AppDialogs.registerSuccessDialog(context);
+      if (context.mounted) {
+        Navigator.of(
+          context,
+        ).pushNamedAndRemoveUntil(AppRoutes.homeBottomNav, (route) => false);
+        AppDialogs.registerSuccessDialog(context);
+      }
     } catch (e) {
+      Logger().e('saveUser error: $e');
       _isLoading = false;
       notifyListeners();
-      AppDialogs.loginFailedDialog(context);
+      if (context.mounted) AppDialogs.registerFailedDialog(context);
     }
   }
 }

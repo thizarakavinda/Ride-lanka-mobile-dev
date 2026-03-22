@@ -30,7 +30,7 @@ class AppDialogs {
     );
   }
 
-   static void loginErrorDialog(BuildContext context) {
+  static void loginErrorDialog(BuildContext context) {
     showGeneralDialog(
       context: context,
       barrierDismissible: false,
@@ -40,7 +40,7 @@ class AppDialogs {
         return Center(
           child: CustomAlerts(
             alertTitle: 'Failed to Login',
-            subTitle: 'Please check your internet connection and try again',
+            subTitle: 'Something went wrong. Please try again.',
             buttonText: 'Try Again',
             onPressed: () {
               Navigator.pop(context);
@@ -56,9 +56,6 @@ class AppDialogs {
       },
     );
   }
-
-
-
 
   static void registerSuccessDialog(BuildContext context) {
     showGeneralDialog(

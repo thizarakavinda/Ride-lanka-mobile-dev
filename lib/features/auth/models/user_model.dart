@@ -5,11 +5,9 @@ class UserModel {
   final String email;
   final String dob;
   final String phone;
-
   final List<String> interests;
   final String travelType;
   final String budget;
-
   final DateTime createdAt;
 
   UserModel({
@@ -25,34 +23,46 @@ class UserModel {
     required this.createdAt,
   });
 
+  // Used when sending to backend POST /api/users/profile
+  // Backend accepts: { name, interests }
+  Map<String, dynamic> toProfilePayload() {
+    return {'name': '$firstName $lastName', 'interests': interests};
+  }
+
+  // Full local representation (used internally if needed)
   Map<String, dynamic> toMap() {
     return {
-      "firstName": firstName,
-      "lastName": lastName,
-      "email": email,
-      "dob": dob,
-      "phone": phone,
-      "preferences": {
-        "interests": interests,
-        "travelType": travelType,
-        "budget": budget,
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'dob': dob,
+      'phone': phone,
+      'preferences': {
+        'interests': interests,
+        'travelType': travelType,
+        'budget': budget,
       },
-      "createdAt": createdAt,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 
+  // fromMap now expects a plain REST JSON response (no Firestore Timestamps)
   factory UserModel.fromMap(Map<String, dynamic> map, String uid) {
+    final prefs = map['preferences'] as Map<String, dynamic>? ?? {};
     return UserModel(
       uid: uid,
-      firstName: map["firstName"],
-      lastName: map["lastName"],
-      email: map["email"],
-      dob: map["dob"],
-      phone: map["phone"],
-      interests: List<String>.from(map["preferences"]["interests"]),
-      travelType: map["preferences"]["travelType"],
-      budget: map["preferences"]["budget"],
-      createdAt: map["createdAt"].toDate(),
+      firstName: map['firstName'] as String? ?? '',
+      lastName: map['lastName'] as String? ?? '',
+      email: map['email'] as String? ?? '',
+      dob: map['dob'] as String? ?? '',
+      phone: map['phone'] as String? ?? '',
+      interests: List<String>.from(prefs['interests'] ?? []),
+      travelType: prefs['travelType'] as String? ?? '',
+      budget: prefs['budget'] as String? ?? '',
+      // createdAt comes as ISO string from REST, not a Firestore Timestamp
+      createdAt: map['createdAt'] != null
+          ? DateTime.parse(map['createdAt'] as String)
+          : DateTime.now(),
     );
   }
 }
