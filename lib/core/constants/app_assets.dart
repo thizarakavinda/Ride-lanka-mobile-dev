@@ -18,4 +18,13 @@ class AppAssets {
   static const String waterfallIcon = 'assets/icons/waterfall.svg';
 
   static const String wildlifeIcon = 'assets/icons/wildlife.svg';
+
+  //badges
+  static const String silverIcon = 'assets/images/silver.png';
+
+  static const String bronzeIcon = 'assets/images/bronze.png';
+
+  static const String platinumIcon = 'assets/images/fi.png';
+
 }
+

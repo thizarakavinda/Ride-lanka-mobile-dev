@@ -26,7 +26,7 @@ class ProfileSummaryButton extends StatelessWidget {
         InkWell(
           onTap: onTap,
           child: CircleAvatar(
-            backgroundColor: AppColors.primaryColor,
+            backgroundColor: AppColors.lowPrimaryColor,
             radius: radius,
             child: Icon(icon, color: AppColors.white, size: radius * 0.75),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ride_lanka/core/constants/app_colors.dart';
+import 'package:ride_lanka/features/badges/data/badge_data.dart';
 
 class BadgesCard extends StatelessWidget {
   final String? badgeImageUrl;
@@ -8,6 +9,7 @@ class BadgesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final badges = BadgeData.badges;
     final double cardHeight = (MediaQuery.of(context).size.height * 0.13).clamp(
       90.0,
       130.0,
@@ -23,13 +25,18 @@ class BadgesCard extends StatelessWidget {
           border: Border.all(color: AppColors.searchBoxBorder),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage('$badgeImageUrl'),
-              radius: 40,
-            ),
-          ],
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: badges.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 12.0),
+              child: CircleAvatar(
+                radius: cardHeight * 0.4,
+                backgroundImage: NetworkImage(badges[index].imageUrl),
+              ),
+            );
+          },
         ),
       ),
     );

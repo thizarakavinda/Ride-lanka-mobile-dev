@@ -6,6 +6,7 @@ import 'package:ride_lanka/features/profile/widgets/profile_info.dart';
 import 'package:ride_lanka/features/profile/widgets/profile_summary_row.dart';
 import 'package:ride_lanka/features/profile/widgets/badges_card.dart';
 import 'package:ride_lanka/features/profile/widgets/setting_card.dart';
+import 'package:ride_lanka/routes/app_routes.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -72,12 +73,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       BadgesCard(
                         badgeImageUrl:
                             'https://cdn-icons-png.flaticon.com/512/616/616408.png',
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.badgesInfo);
+                        },
                       ),
 
                       const SizedBox(height: 20),
 
-                      SettingCard(settingTitle: 'Quests', onTap: () {}),
+                      SettingCard(
+                        settingTitle: 'Quests',
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.quests);
+                        },
+                      ),
 
                       const SizedBox(height: 30),
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ride_lanka/features/profile/widgets/profile_summary.dart';
+import 'package:ride_lanka/routes/app_routes.dart';
 
 class ProfileSummaryRow extends StatelessWidget {
   const ProfileSummaryRow({super.key});
@@ -13,7 +14,9 @@ class ProfileSummaryRow extends StatelessWidget {
           icon: Icons.location_on,
           value: '1',
           type: 'Trips',
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.tripHistory);
+          },
         ),
         ProfileSummaryButton(
           icon: Icons.favorite,
