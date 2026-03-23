@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 
 class ApiClient {
-  static const String baseUrl = 'YOUR_BASE_URL_HERE';
+  static const String baseUrl = 'http://10.0.2.2:5000';
 
   static Future<Map<String, String>> _authHeaders() async {
     final user = FirebaseAuth.instance.currentUser;

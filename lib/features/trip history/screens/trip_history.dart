@@ -20,7 +20,7 @@ class _TripHistoryState extends State<TripHistory> {
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
         title: Text(
-          'Quests',
+          'Trip History',
           style: TextStyle(
             fontSize: (sw * 0.062).clamp(20.0, 28.0),
             fontWeight: FontWeight.w500,
