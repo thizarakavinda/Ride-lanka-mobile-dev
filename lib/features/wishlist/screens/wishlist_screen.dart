@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ride_lanka/core/constants/app_colors.dart';
 import 'package:ride_lanka/core/utils/wishlist_store.dart';
-import 'package:ride_lanka/features/home/data/popular_place_data.dart';
-import 'package:ride_lanka/features/home/models/popular_place_model.dart';
+import 'package:provider/provider.dart';
+import 'package:ride_lanka/features/home/providers/home_provider.dart';
 import 'package:ride_lanka/features/home/widgets/popular_place_card.dart';
 import 'package:ride_lanka/features/wishlist/widgets/category_filter_row.dart';
 import 'package:ride_lanka/widgets/custom_search_bar.dart';
@@ -15,14 +15,14 @@ class WishlistScreen extends StatefulWidget {
 }
 
 class _WishlistScreenState extends State<WishlistScreen> {
-  PopularPlaceData popularPlaceData = PopularPlaceData();
-
-  List<PopularPlaceModel> get _favoritePlaces => popularPlaceData.popularPlaces
-      .where((place) => FavoritesStore.isFavorite(place.id))
-      .toList();
 
   @override
   Widget build(BuildContext context) {
+    final homeProvider = context.watch<HomeProvider>();
+    final _favoritePlaces = homeProvider.popularPlaces
+        .where((place) => FavoritesStore.isFavorite(place.id))
+        .toList();
+
     return Scaffold(
       backgroundColor: AppColors.bottomNavBackground,
       body: SafeArea(
@@ -40,7 +40,13 @@ class _WishlistScreenState extends State<WishlistScreen> {
               const SizedBox(height: 20),
               const CategoryFilterRow(),
               const SizedBox(height: 20),
-              if (_favoritePlaces.isEmpty)
+              if (homeProvider.isLoading)
+                const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              else if (_favoritePlaces.isEmpty)
                 const Expanded(
                   child: Center(
                     child: Column(

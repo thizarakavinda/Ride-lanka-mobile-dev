@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ride_lanka/core/constants/app_assets.dart';
 import 'package:ride_lanka/core/constants/app_colors.dart';
+import 'package:ride_lanka/features/auth/services/auth_service.dart';
 import 'package:ride_lanka/routes/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,15 +18,44 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    _handleSplashNavigation();
+  }
+
+  Future<void> _handleSplashNavigation() async {
+    final stopwatch = Stopwatch()..start();
 
     if (FirebaseAuth.instance.currentUser != null) {
-      Timer(const Duration(seconds: 3), () {
+      try {
+        final profileFuture = AuthService().fetchProfile();
+        
+        await Future.wait([
+          Future.delayed(const Duration(seconds: 3)),
+          profileFuture,
+        ]);
+
+        final profile = await profileFuture;
+        
+        if (!mounted) return;
+
+        if (profile != null) {
+          Navigator.pushReplacementNamed(context, AppRoutes.homeBottomNav);
+        } else {
+          await FirebaseAuth.instance.signOut();
+          Navigator.pushReplacementNamed(context, AppRoutes.login);
+        }
+      } catch (e) {
+        final elapsed = stopwatch.elapsedMilliseconds;
+        if (elapsed < 3000) {
+          await Future.delayed(Duration(milliseconds: 3000 - elapsed));
+        }
+        
+        if (!mounted) return;
         Navigator.pushReplacementNamed(context, AppRoutes.homeBottomNav);
-      });
+      }
     } else {
-      Timer(const Duration(seconds: 3), () {
-        Navigator.pushReplacementNamed(context, AppRoutes.land);
-      });
+      await Future.delayed(const Duration(seconds: 3));
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, AppRoutes.land);
     }
   }
 

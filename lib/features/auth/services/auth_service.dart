@@ -60,7 +60,7 @@ class AuthService {
       }
     } catch (e) {
       Logger().e('fetchProfile error: $e');
-      return null;
+      rethrow;
     }
   }
 

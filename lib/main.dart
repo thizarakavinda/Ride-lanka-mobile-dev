@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ride_lanka/features/auth/providers/auth_provider.dart';
 import 'package:ride_lanka/features/auth/providers/meta_data_provider.dart';
+import 'package:ride_lanka/features/home/providers/home_provider.dart';
 import 'package:ride_lanka/routes/app_routes.dart';
 
 void main() async {
@@ -14,6 +15,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthController()),
         ChangeNotifierProvider(create: (_) => MetaDataProvider()),
+        ChangeNotifierProvider(create: (_) => HomeProvider()),
       ],
       child: const MyApp(),
     ),

@@ -56,7 +56,6 @@ class AuthController extends ChangeNotifier {
     _confirmPasswordController.clear();
   }
 
- 
   Future<void> signUp(BuildContext context) async {
     try {
       if (Validators.isEmpty(_firstNameController.text) ||
@@ -110,7 +109,6 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-
   Future<void> signIn(BuildContext context) async {
     try {
       if (Validators.isEmpty(_emailController.text) ||
@@ -152,7 +150,6 @@ class AuthController extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   Future<void> signOut(BuildContext context) async {
     try {
