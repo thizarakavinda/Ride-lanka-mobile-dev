@@ -122,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   labelText: 'Password',
                                   keyboardType: TextInputType.text,
                                   isPassword: true,
-                                  isRegister: false,
+                                  isRegister: true,
                                   controller: authController.passwordController,
                                   enabled: !authController.isLoading,
                                 ),
