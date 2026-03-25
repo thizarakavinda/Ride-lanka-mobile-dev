@@ -11,6 +11,7 @@ import 'package:ride_lanka/features/quests/screens/quests_screen.dart';
 import 'package:ride_lanka/features/splash/screens/land_screen.dart';
 import 'package:ride_lanka/features/splash/screens/splash_screen.dart';
 import 'package:ride_lanka/features/trip%20history/screens/trip_history.dart';
+import 'package:ride_lanka/features/trip/screens/new_trip_screen.dart';
 import 'package:ride_lanka/features/trip/screens/trip_plan_screen.dart';
 import 'package:ride_lanka/features/wishlist/screens/wishlist_screen.dart';
 import 'package:ride_lanka/home_bottom_nav.dart';
@@ -33,6 +34,7 @@ class AppRoutes {
   static const String quests = '/quests';
   static const String tripHistory = '/history';
   static const String placeDetails = '/placeDetails';
+  static const String newTrpPlanScreen = '/newTripPlanScreen';
 
   static Map<String, WidgetBuilder> routes = {
     splash: (context) => const SplashScreen(),
@@ -44,11 +46,12 @@ class AppRoutes {
     homeBottomNav: (context) => const HomeBottomNav(),
     home: (context) => const MainHome(),
     wishlist: (context) => const WishlistScreen(),
-    tripPlan: (context) => const TripPlanScreen(),
+    tripPlan: (context) => TripPlanScreen(),
     profile: (context) => const ProfileScreen(),
     badgesInfo: (context) => const BadgesInfo(),
     quests: (context) => const QuestsScreen(),
     tripHistory: (context) => const TripHistory(),
     placeDetails: (context) => const PlaceDetails(),
+    newTrpPlanScreen: (context) => const NewTripScreen(),
   };
 }

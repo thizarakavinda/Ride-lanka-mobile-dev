@@ -81,6 +81,6 @@ class PopularPlaceModel {
           'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80',
     };
     return categoryImages[category] ??
-        'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80';
+        'https://industry.fersa.com/media/catalog/product/cache/44f599743c1dc4f12bba69d4eec200c5/n/k/nke_dummy_npa.png';
   }
 }

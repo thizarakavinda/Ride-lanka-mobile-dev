@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ride_lanka/features/wishlist/providers/wishlist_provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PlaceDetailsInfoCard extends StatelessWidget {
   final String id;
@@ -220,17 +221,30 @@ class PlaceDetailsInfoCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: isLoadingMap
-                    ? const Center(child: CircularProgressIndicator())
+                    ? Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(color: Colors.white),
+                      )
                     : Image.network(
                         mapUrl ??
                             'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&q=80',
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => const Center(
-                          child: Icon(
-                            Icons.map,
-                            size: 50,
-                            color: Colors.grey,
-                          ),
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Shimmer.fromColors(
+                            baseColor: Colors.grey.shade300,
+                            highlightColor: Colors.grey.shade100,
+                            child: Container(
+                              height: 180,
+                              width: double.infinity,
+                              color: Colors.white,
+                            ),
+                          );
+                        },
+                        errorBuilder: (_, __, ___) => Image.asset(
+                          'assets/images/imgplaceholder.jpg',
+                          fit: BoxFit.cover,
                         ),
                       ),
               ),

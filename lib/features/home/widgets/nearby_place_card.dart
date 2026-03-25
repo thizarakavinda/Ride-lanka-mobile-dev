@@ -5,6 +5,7 @@ import 'package:ride_lanka/core/constants/app_colors.dart';
 import 'package:ride_lanka/features/home/models/nearby_place_model.dart';
 import 'package:ride_lanka/features/wishlist/providers/wishlist_provider.dart';
 import 'package:ride_lanka/routes/app_routes.dart';
+import 'package:shimmer/shimmer.dart';
 
 class NearbyPlaceCard extends StatelessWidget {
   final NearbyPlaceModel place;
@@ -34,6 +35,26 @@ class NearbyPlaceCard extends StatelessWidget {
                 height: 350,
                 width: 220,
                 fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Container(
+                      height: 350,
+                      width: 220,
+                      color: Colors.white,
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/images/imgplaceholder.jpg',
+                    height: 350,
+                    width: 220,
+                    fit: BoxFit.cover,
+                  );
+                },
               ),
             ),
 

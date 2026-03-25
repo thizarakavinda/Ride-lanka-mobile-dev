@@ -5,6 +5,7 @@ import 'package:ride_lanka/features/home/models/popular_place_model.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:ride_lanka/features/home/widgets/place_details_bottom_bar.dart';
 import 'package:ride_lanka/features/home/widgets/place_details_info_card.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PlaceDetails extends StatefulWidget {
   const PlaceDetails({super.key});
@@ -155,7 +156,18 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                   child: Image.network(
                     imageUrl,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(color: Colors.grey),
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(color: Colors.white),
+                      );
+                    },
+                    errorBuilder: (_, __, ___) => Image.asset(
+                      'assets/images/imgplaceholder.jpg',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Positioned(

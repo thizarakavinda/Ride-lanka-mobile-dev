@@ -1,131 +1,120 @@
 import 'package:flutter/foundation.dart';
-import 'package:ride_lanka/features/trip/models/trip_plan_model.dart';
-import 'package:ride_lanka/features/trip/models/trip_stop_model.dart';
+import 'package:ride_lanka/features/trip/models/trip_model.dart';
 import 'package:ride_lanka/features/trip/services/trip_service.dart';
 
 class TripProvider extends ChangeNotifier {
-  final TripService _tripService = TripService();
+  final TripService _tripService;
 
-  // Current session Builder State
-  List<TripStopModel> _currentStops = [];
-  String _tripName = 'My Awesome Trip';
-  String _routePreference = 'shortest'; // shortest, safest, max_places
-  String _vehicleType = 'Car'; // UI decorative for now
+  List<TripModel> myTrips = [];
+  bool isLoadingTrips = false;
 
-  bool _isLoading = false;
-  String? _errorMessage;
+  bool isGeneratingPlan = false;
+  List<StopModel> generatedStops = [];
+  String routePreference = 'shortest';
 
-  // History State
-  List<TripPlanModel> _savedTrips = [];
+  TripProvider(this._tripService);
 
-  // Getters
-  List<TripStopModel> get currentStops => _currentStops;
-  String get tripName => _tripName;
-  String get routePreference => _routePreference;
-  String get vehicleType => _vehicleType;
-  bool get isLoading => _isLoading;
-  String? get errorMessage => _errorMessage;
-  List<TripPlanModel> get savedTrips => _savedTrips;
-
-  // Setters
-  void setTripName(String name) {
-    _tripName = name;
+  Future<void> fetchUserTrips() async {
+    isLoadingTrips = true;
     notifyListeners();
-  }
-
-  void setRoutePreference(String pref) {
-    _routePreference = pref;
-    notifyListeners();
-  }
-
-  void setVehicleType(String vehicle) {
-    _vehicleType = vehicle;
-    notifyListeners();
-  }
-
-  // Builder Methods
-  void addStop(TripStopModel stop) {
-    // Avoid duplicates by placeId, or just simple check by name
-    if (!_currentStops.any((s) => s.name == stop.name)) {
-      _currentStops.add(stop);
+    try {
+      myTrips = await _tripService.getUserTrips();
+    } catch (e) {
+      debugPrint("Error fetching trips: $e");
+    } finally {
+      isLoadingTrips = false;
       notifyListeners();
     }
   }
 
-  void removeStop(TripStopModel stop) {
-    _currentStops.removeWhere((s) => s.name == stop.name);
+  Future<void> generatePlan({
+    required String tripName,
+    required String tripDate,
+    required int stopCount,
+    required List<String> favorites,
+    required String preference,
+  }) async {
+    isGeneratingPlan = true;
+    routePreference = preference;
     notifyListeners();
-  }
-
-  void clearBuilder() {
-    _currentStops = [];
-    _tripName = 'My Awesome Trip';
-    _routePreference = 'shortest';
-    _vehicleType = 'Car';
-    notifyListeners();
-  }
-
-  // API Interactions
-  Future<void> optimizeRoute() async {
-    if (_currentStops.length < 2) return; // Nothing to optimize
-    _isLoading = true;
-    _errorMessage = null;
-    notifyListeners();
-
     try {
-      final optimized = await _tripService.reorderStops(
-        stops: _currentStops,
-        routePreference: _routePreference,
+      generatedStops = await _tripService.generateTripPlan(
+        tripName: tripName,
+        tripDate: tripDate,
+        stopCount: stopCount,
+        favorites:
+            favorites, // Route preference is intentionally excluded per the backend API
       );
-      _currentStops = optimized;
     } catch (e) {
-      _errorMessage = e.toString();
+      debugPrint("Error generating plan: $e");
+      throw Exception("Failed to generate trip plan: $e");
     } finally {
-      _isLoading = false;
+      isGeneratingPlan = false;
       notifyListeners();
     }
   }
 
-  Future<bool> saveCurrentTrip(String userId) async {
-    if (_currentStops.isEmpty) return false;
-    _isLoading = true;
-    _errorMessage = null;
-    notifyListeners();
-
+  Future<void> saveGeneratedTrip(
+    String tripName,
+    String tripDate,
+    int stopCount,
+    List<String> favorites,
+  ) async {
     try {
-      final trip = TripPlanModel(
-        userId: userId,
-        tripName: _tripName,
-        tripDate: DateTime.now().toIso8601String(),
-        stopCount: _currentStops.length,
-        favorites: [],
-        stops: _currentStops,
-        status: 'Upcoming',
+      final trip = TripModel(
+        tripName: tripName,
+        tripDate: tripDate,
+        stopCount: stopCount,
+        status: "Upcoming",
+        favorites: favorites,
+        stops: generatedStops,
       );
-      await _tripService.saveTrip(trip);
-      await fetchSavedTrips(); // Refresh the list
-      return true;
+      final newTrip = await _tripService.saveUserTrip(trip);
+      myTrips.insert(0, newTrip);
+      generatedStops.clear(); // clear state after saving
+      notifyListeners();
     } catch (e) {
-      _errorMessage = e.toString();
-      return false;
+      debugPrint("Error saving trip to database: $e");
+      throw e;
+    }
+  }
+
+  Future<void> applyAlgorithm(String newPreference) async {
+    routePreference = newPreference;
+    isGeneratingPlan = true;
+    notifyListeners();
+    try {
+      generatedStops = await _tripService.reorderRouteList(
+        generatedStops,
+        routePreference,
+      );
+    } catch (e) {
+      debugPrint("Error reordering: $e");
     } finally {
-      _isLoading = false;
+      isGeneratingPlan = false;
       notifyListeners();
     }
   }
 
-  Future<void> fetchSavedTrips() async {
-    _isLoading = true;
-    _errorMessage = null;
-    notifyListeners();
-
+  Future<void> updateTripStatus(TripModel trip, String newStatus) async {
+    if (trip.id == null) return;
     try {
-      _savedTrips = await _tripService.fetchSavedTrips();
+      await _tripService.updateUserTrip(trip.id!, {'status': newStatus});
+      int index = myTrips.indexWhere((t) => t.id == trip.id);
+      if (index != -1) {
+        myTrips[index] = TripModel(
+          id: trip.id,
+          tripName: trip.tripName,
+          tripDate: trip.tripDate,
+          stopCount: trip.stopCount,
+          status: newStatus,
+          favorites: trip.favorites,
+          stops: trip.stops,
+        );
+        notifyListeners();
+      }
     } catch (e) {
-      _errorMessage = e.toString();
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+      debugPrint("Error updating status: $e");
     }
   }
 }

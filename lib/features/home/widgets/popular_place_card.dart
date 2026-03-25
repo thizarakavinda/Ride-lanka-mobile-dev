@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:ride_lanka/features/wishlist/providers/wishlist_provider.dart';
 import 'package:ride_lanka/features/home/models/popular_place_model.dart';
 import 'package:ride_lanka/routes/app_routes.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PopularPlaceCard extends StatefulWidget {
   final PopularPlaceModel place;
@@ -45,6 +46,26 @@ class _PopularPlaceCardState extends State<PopularPlaceCard> {
                 width: 80,
                 height: 80,
                 fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Container(
+                      width: 80,
+                      height: 80,
+                      color: Colors.white,
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/images/imgplaceholder.jpg',
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                  );
+                },
               ),
             ),
             const SizedBox(width: 16),

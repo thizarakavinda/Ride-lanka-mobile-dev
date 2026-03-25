@@ -10,6 +10,7 @@ import 'package:ride_lanka/features/home/widgets/category_item.dart';
 import 'package:ride_lanka/features/home/widgets/nearby_place_card.dart';
 import 'package:ride_lanka/features/home/widgets/popular_place_card.dart';
 import 'package:ride_lanka/routes/app_routes.dart';
+import 'package:shimmer/shimmer.dart';
 
 const String helvetica1 = 'Helvetica1';
 
@@ -247,11 +248,7 @@ class _MainHomeState extends State<MainHome> {
                 // ── Main scrollable area ───────────────────────────────
                 Expanded(
                   child: homeProvider.isLoading
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.lowPrimaryColor,
-                          ),
-                        )
+                      ? _buildHomeShimmer(size, hPad)
                       : SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
                           child: Column(
@@ -278,9 +275,7 @@ class _MainHomeState extends State<MainHome> {
                                 ),
                                 const SizedBox(height: 12),
                                 if (homeProvider.isSearching)
-                                  const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
+                                  _buildExploreShimmerList(hPad)
                                 else if (homeProvider.searchResults.isEmpty)
                                   Padding(
                                     padding: EdgeInsets.symmetric(
@@ -333,9 +328,7 @@ class _MainHomeState extends State<MainHome> {
                                 ),
                                 const SizedBox(height: 12),
                                 if (homeProvider.isCategoryLoading)
-                                  const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
+                                  _buildExploreShimmerList(hPad)
                                 else if (homeProvider.categoryPlaces.isEmpty)
                                   Padding(
                                     padding: EdgeInsets.symmetric(
@@ -458,7 +451,124 @@ class _MainHomeState extends State<MainHome> {
       ),
     );
   }
+
+  Widget _buildHomeShimmer(Size size, double hPad) {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: size.height * 0.025),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: hPad),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              child: Container(
+                height: 24,
+                width: 120,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: size.height * 0.3,
+            child: ListView.builder(
+              padding: EdgeInsets.symmetric(horizontal: hPad),
+              scrollDirection: Axis.horizontal,
+              itemCount: 3,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Shimmer.fromColors(
+                  baseColor: Colors.grey.shade300,
+                  highlightColor: Colors.grey.shade100,
+                  child: Container(
+                    width: 220,
+                    margin: const EdgeInsets.only(right: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(height: size.height * 0.025),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: hPad),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              child: Container(
+                height: 24,
+                width: 140,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: hPad),
+            child: ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 4,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                return Shimmer.fromColors(
+                  baseColor: Colors.grey.shade300,
+                  highlightColor: Colors.grey.shade100,
+                  child: Container(
+                    height: 96,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(height: size.height * 0.04),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildExploreShimmerList(double hPad) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: hPad),
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 5,
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        itemBuilder: (context, index) {
+          return Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            child: Container(
+              height: 96,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
+
 
 // ── Explore place card used for both search + category results ─────────────
 class _ExplorePlaceCard extends StatelessWidget {
@@ -493,14 +603,23 @@ class _ExplorePlaceCard extends StatelessWidget {
                     width: 90,
                     height: 90,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: 90,
+                          height: 90,
+                          color: Colors.white,
+                        ),
+                      );
+                    },
+                    errorBuilder: (_, __, ___) => Image.asset(
+                      'assets/images/imgplaceholder.jpg',
                       width: 90,
                       height: 90,
-                      color: Colors.grey.shade200,
-                      child: const Icon(
-                        Icons.image_not_supported,
-                        color: Colors.grey,
-                      ),
+                      fit: BoxFit.cover,
                     ),
                   )
                 : Container(
