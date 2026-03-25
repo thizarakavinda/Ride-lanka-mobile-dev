@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:ride_lanka/features/auth/providers/auth_provider.dart';
 import 'package:ride_lanka/features/auth/providers/meta_data_provider.dart';
 import 'package:ride_lanka/features/home/providers/home_provider.dart';
+import 'package:ride_lanka/features/quests/providers/quests_provider.dart';
 import 'package:ride_lanka/features/trip/providers/trip_provider.dart';
 import 'package:ride_lanka/features/trip/services/trip_service.dart';
 import 'package:ride_lanka/features/wishlist/providers/wishlist_provider.dart';
@@ -21,6 +22,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => WishlistProvider()),
         ChangeNotifierProvider(create: (_) => TripProvider(TripService())),
+        ChangeNotifierProvider(create: (_) => QuestProvider()),
       ],
       child: const MyApp(),
     ),
