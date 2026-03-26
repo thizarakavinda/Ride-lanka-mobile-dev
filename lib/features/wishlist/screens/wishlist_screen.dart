@@ -90,8 +90,9 @@ class _WishlistScreenState extends State<WishlistScreen> {
             distance: n.distance,
             rating: n.rating,
             reviews: n.reviewsCount,
-            location: 'Sri Lanka',
+            location: n.location,
             imageUrl: n.imageUrl,
+            description: n.description,
           ),
         )
         .toList();
@@ -116,6 +117,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
             reviews: 125,
             location: 'Sri Lanka',
             imageUrl: e.imageUrl,
+            description: e.snippet,
           ),
         )
         .toList();

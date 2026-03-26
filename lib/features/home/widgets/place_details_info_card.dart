@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ride_lanka/features/wishlist/providers/wishlist_provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PlaceDetailsInfoCard extends StatelessWidget {
   final String id;
@@ -12,7 +13,8 @@ class PlaceDetailsInfoCard extends StatelessWidget {
   final double rating;
   final int reviewsCount;
   final String description;
-  final String? mapUrl;
+  final double? latitude;
+  final double? longitude;
   final bool isLoadingMap;
 
   const PlaceDetailsInfoCard({
@@ -25,9 +27,11 @@ class PlaceDetailsInfoCard extends StatelessWidget {
     required this.rating,
     required this.reviewsCount,
     required this.description,
-    this.mapUrl,
+    this.latitude,
+    this.longitude,
     required this.isLoadingMap,
   });
+
 
   @override
   Widget build(BuildContext context) {
@@ -204,32 +208,29 @@ class PlaceDetailsInfoCard extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: isLoadingMap
+                child: isLoadingMap || latitude == null || longitude == null
                     ? Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade100,
                         child: Container(color: Colors.white),
                       )
-                    : Image.network(
-                        mapUrl ??
-                            'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&q=80',
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Shimmer.fromColors(
-                            baseColor: Colors.grey.shade300,
-                            highlightColor: Colors.grey.shade100,
-                            child: Container(
-                              height: 180,
-                              width: double.infinity,
-                              color: Colors.white,
-                            ),
-                          );
-                        },
-                        errorBuilder: (_, __, ___) => Image.asset(
-                          'assets/images/imgplaceholder.jpg',
-                          fit: BoxFit.cover,
+                    : GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(latitude!, longitude!),
+                          zoom: 14,
                         ),
+                        markers: {
+                          Marker(
+                            markerId: const MarkerId('place_location'),
+                            position: LatLng(latitude!, longitude!),
+                            infoWindow: InfoWindow(title: title),
+                          ),
+                        },
+                        zoomControlsEnabled: false,
+                        mapToolbarEnabled: false,
+                        myLocationButtonEnabled: false,
+                        scrollGesturesEnabled: true,
+                        zoomGesturesEnabled: true,
                       ),
               ),
             ),

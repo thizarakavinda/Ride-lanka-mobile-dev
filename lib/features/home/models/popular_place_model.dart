@@ -9,6 +9,7 @@ class PopularPlaceModel {
   final double rating;
   final int reviews;
   final String imageUrl;
+  final String description;
   final bool isFavorite;
 
   PopularPlaceModel({
@@ -20,8 +21,10 @@ class PopularPlaceModel {
     required this.rating,
     required this.reviews,
     required this.imageUrl,
+    required this.description,
     this.isFavorite = false,
   });
+
 
   factory PopularPlaceModel.fromFirestore(
     DocumentSnapshot doc, {
@@ -38,7 +41,9 @@ class PopularPlaceModel {
         rating: 4.5,
         reviews: 0,
         imageUrl: '',
+        description: '',
       );
+
     }
 
     final images = data['images'] as List<dynamic>? ?? [];
@@ -55,8 +60,10 @@ class PopularPlaceModel {
       rating: ((data['averageCost'] ?? 4.5) as num).toDouble(),
       reviews: ((data['popularityScore'] ?? 0) as num).toInt(),
       imageUrl: imageUrl,
+      description: data['description'] ?? '',
       isFavorite: false,
     );
+
   }
 
   static String _fallbackImage(String category) {

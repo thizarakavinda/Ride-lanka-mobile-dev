@@ -4,22 +4,27 @@ class NearbyPlaceModel {
   final String id;
   final String title;
   final String category;
+  final String location;
   final String distance;
   final double rating;
   final int reviewsCount;
   final String imageUrl;
+  final String description;
   final bool isFavorite;
 
   NearbyPlaceModel({
     required this.id,
     required this.title,
     required this.category,
+    required this.location,
     required this.distance,
     required this.rating,
     required this.reviewsCount,
     required this.imageUrl,
+    required this.description,
     this.isFavorite = false,
   });
+
 
   factory NearbyPlaceModel.fromFirestore(
     DocumentSnapshot doc, {
@@ -31,11 +36,14 @@ class NearbyPlaceModel {
         id: doc.id,
         title: 'Unknown',
         category: 'Destination',
+        location: 'Sri Lanka',
         distance: calculatedDistance,
         rating: 4.5,
         reviewsCount: 0,
         imageUrl: '',
+        description: '',
       );
+
     }
 
     final images = data['images'] as List<dynamic>? ?? [];
@@ -47,12 +55,15 @@ class NearbyPlaceModel {
       id: doc.id,
       title: data['name'] ?? 'Unknown',
       category: data['category'] ?? 'Destination',
+      location: data['district'] ?? data['province'] ?? 'Sri Lanka',
       distance: calculatedDistance,
       rating: ((data['averageCost'] ?? 4.5) as num).toDouble(),
       reviewsCount: ((data['popularityScore'] ?? 0) as num).toInt(),
       imageUrl: imageUrl,
+      description: data['description'] ?? '',
       isFavorite: false,
     );
+
   }
 
   static String _fallbackImage(String category) {

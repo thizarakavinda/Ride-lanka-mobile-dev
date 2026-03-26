@@ -15,7 +15,8 @@ class PlaceDetails extends StatefulWidget {
 }
 
 class _PlaceDetailsState extends State<PlaceDetails> {
-  String? _mapUrl;
+  double? _lat;
+  double? _lng;
   bool _isLoadingMap = true;
   bool _initialized = false;
 
@@ -49,8 +50,8 @@ class _PlaceDetailsState extends State<PlaceDetails> {
         final lng = locations.first.longitude;
 
         setState(() {
-          _mapUrl =
-              'https://static-maps.yandex.ru/1.x/?ll=$lng,$lat&size=600,300&z=13&l=map&pt=$lng,$lat,pm2rdm';
+          _lat = lat;
+          _lng = lng;
           _isLoadingMap = false;
         });
         return;
@@ -60,8 +61,8 @@ class _PlaceDetailsState extends State<PlaceDetails> {
     }
 
     setState(() {
-      _mapUrl =
-          'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&q=80';
+      _lat = null;
+      _lng = null;
       _isLoadingMap = false;
     });
   }
@@ -88,7 +89,8 @@ class _PlaceDetailsState extends State<PlaceDetails> {
 
   String _getLocation(dynamic place) {
     if (place is PopularPlaceModel) return place.location;
-    return 'Kandy';
+    if (place is NearbyPlaceModel) return place.location;
+    return 'Sri Lanka';
   }
 
   String _getDistance(dynamic place) {
@@ -118,7 +120,9 @@ class _PlaceDetailsState extends State<PlaceDetails> {
 
   String _getDescription(dynamic place) {
     if (place is ExplorePlaceModel) return place.snippet;
-    return 'Large temple featuring rituals and services around the sacred Tooth Relic, the canine tooth of Buddha';
+    if (place is PopularPlaceModel) return place.description;
+    if (place is NearbyPlaceModel) return place.description;
+    return '';
   }
 
   @override
@@ -222,7 +226,8 @@ class _PlaceDetailsState extends State<PlaceDetails> {
               reviewsCount: reviewsCount,
               description: description,
               isLoadingMap: _isLoadingMap,
-              mapUrl: _mapUrl,
+              latitude: _lat,
+              longitude: _lng,
             ),
           ),
 

@@ -21,19 +21,19 @@ class _NewTripScreenState extends State<NewTripScreen> {
     {
       "title": "Activities",
       "options": [
-        {"id": "hiking", "label": "🥾 Hiking"},
-        {"id": "dance", "label": "💃 Dancing"},
-        {"id": "surfing", "label": "🏄 Surfing"},
-        {"id": "safari", "label": "🦁 Safari"},
+        {"id": "hiking", "label": " Hiking"},
+        {"id": "dance", "label": "Dancing"},
+        {"id": "surfing", "label": " Surfing"},
+        {"id": "safari", "label": " Safari"},
       ],
     },
     {
       "title": "Themes",
       "options": [
-        {"id": "culture", "label": "🏛️ Culture"},
-        {"id": "nature", "label": "🌿 Nature"},
-        {"id": "food", "label": "🍜 Food"},
-        {"id": "relaxation", "label": "🧘 Relax"},
+        {"id": "culture", "label": " Culture"},
+        {"id": "nature", "label": " Nature"},
+        {"id": "food", "label": " Food"},
+        {"id": "relaxation", "label": " Relax"},
       ],
     },
   ];
