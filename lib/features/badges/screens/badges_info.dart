@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:ride_lanka/core/constants/app_colors.dart';
@@ -92,6 +93,7 @@ class _BadgesInfoState extends State<BadgesInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
         title: const Text(

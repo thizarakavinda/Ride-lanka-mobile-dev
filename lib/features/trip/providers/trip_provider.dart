@@ -14,7 +14,10 @@ class TripProvider extends ChangeNotifier {
 
   TripProvider(this._tripService);
 
-  Future<void> fetchUserTrips() async {
+  Future<void> fetchUserTrips({bool force = false}) async {
+    if (!force && myTrips.isNotEmpty) {
+      return;
+    }
     isLoadingTrips = true;
     notifyListeners();
     try {

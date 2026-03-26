@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ride_lanka/core/constants/app_colors.dart';
 import 'package:ride_lanka/features/trip/models/trip_model.dart';
 import 'package:ride_lanka/features/trip/services/trip_service.dart';
@@ -70,6 +71,7 @@ class _TripHistoryState extends State<TripHistory> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
 

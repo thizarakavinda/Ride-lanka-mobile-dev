@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:ride_lanka/core/constants/app_colors.dart';
 import 'package:ride_lanka/features/trip/providers/trip_provider.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:ride_lanka/features/trip/widgets/new%20trip/date_stops_picker.dart';
+import 'package:ride_lanka/features/trip/widgets/new%20trip/generated_stops_list.dart';
+import 'package:ride_lanka/features/trip/widgets/new%20trip/preferences_card.dart';
+import 'package:ride_lanka/features/trip/widgets/new%20trip/trip_name_input.dart';
 
 class NewTripScreen extends StatefulWidget {
   const NewTripScreen({super.key});
@@ -17,35 +21,11 @@ class _NewTripScreenState extends State<NewTripScreen> {
   int _stopCount = 3;
   final List<String> _selectedFavorites = [];
 
-  final List<Map<String, dynamic>> _favoriteCategories = [
-    {
-      "title": "Activities",
-      "options": [
-        {"id": "hiking", "label": " Hiking"},
-        {"id": "dance", "label": "Dancing"},
-        {"id": "surfing", "label": " Surfing"},
-        {"id": "safari", "label": " Safari"},
-      ],
-    },
-    {
-      "title": "Themes",
-      "options": [
-        {"id": "culture", "label": " Culture"},
-        {"id": "nature", "label": " Nature"},
-        {"id": "food", "label": " Food"},
-        {"id": "relaxation", "label": " Relax"},
-      ],
-    },
-  ];
-
-  String _formatDate(DateTime d) =>
-      '${d.day.toString().padLeft(2, '0')} / ${d.month.toString().padLeft(2, '0')} / ${d.year}';
-
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<TripProvider>(context);
+    final provider = Provider.of<TripProvider>(context);
 
-    // ── Generated Result View ─────────────────────────────────────────────────
+    // ── Generated Result View ────────────────────────────────────────────────
     if (provider.generatedStops.isNotEmpty) {
       return Scaffold(
         backgroundColor: AppColors.bottomNavBackground,
@@ -67,7 +47,6 @@ class _NewTripScreenState extends State<NewTripScreen> {
         ),
         body: Column(
           children: [
-            // Map showing all stop markers
             SizedBox(
               height: 240,
               child: GoogleMap(
@@ -119,78 +98,7 @@ class _NewTripScreenState extends State<NewTripScreen> {
                 },
               ),
             ),
-
-            // Stops list
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                itemCount: provider.generatedStops.length,
-                itemBuilder: (c, i) {
-                  final s = provider.generatedStops[i];
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          radius: 18,
-                          backgroundColor: AppColors.primaryColor,
-                          child: Text(
-                            '${s.stopOrder}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                s.name,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                s.description,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // Save button
+            Expanded(child: GeneratedStopsList(stops: provider.generatedStops)),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
               child: SizedBox(
@@ -229,7 +137,7 @@ class _NewTripScreenState extends State<NewTripScreen> {
       );
     }
 
-    // ── Form View ─────────────────────────────────────────────────────────────
+    // ── Form View ────────────────────────────────────────────────────────────
     return Scaffold(
       backgroundColor: AppColors.bottomNavBackground,
       appBar: AppBar(
@@ -251,242 +159,25 @@ class _NewTripScreenState extends State<NewTripScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Trip Name card ───────────────────────────────────────────────
-            _SectionCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _SectionLabel(label: 'Trip Name', icon: Icons.edit_note),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      hintText: 'e.g., Sri Lanka Adventure',
-                      hintStyle: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      ),
-                      filled: true,
-                      fillColor: AppColors.bottomNavBackground,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 14,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
+            TripNameInput(controller: _nameController),
             const SizedBox(height: 12),
-
-            // ── Date & Stops card ────────────────────────────────────────────
-            _SectionCard(
-              child: Row(
-                children: [
-                  // Date picker
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _SectionLabel(
-                          label: 'Date',
-                          icon: Icons.calendar_today,
-                        ),
-                        const SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () async {
-                            DateTime? picked = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(2030),
-                              builder: (context, child) => Theme(
-                                data: Theme.of(context).copyWith(
-                                  colorScheme: const ColorScheme.light(
-                                    primary: AppColors.primaryColor,
-                                  ),
-                                ),
-                                child: child!,
-                              ),
-                            );
-                            if (picked != null) {
-                              setState(() => _selectedDate = picked);
-                            }
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 14,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColors.bottomNavBackground,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.calendar_month,
-                                  size: 16,
-                                  color: AppColors.primaryColor,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  _selectedDate == null
-                                      ? 'Pick a date'
-                                      : _formatDate(_selectedDate!),
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: _selectedDate == null
-                                        ? Colors.grey
-                                        : Colors.black87,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(width: 12),
-
-                  // Stops dropdown
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _SectionLabel(label: 'Stops', icon: Icons.place),
-                        const SizedBox(height: 10),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14),
-                          decoration: BoxDecoration(
-                            color: AppColors.bottomNavBackground,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<int>(
-                              value: _stopCount,
-                              isExpanded: true,
-                              icon: const Icon(
-                                Icons.keyboard_arrow_down,
-                                color: AppColors.primaryColor,
-                              ),
-                              items: List.generate(
-                                20,
-                                (i) => DropdownMenuItem(
-                                  value: i + 1,
-                                  child: Text(
-                                    '${i + 1} Stop${i == 0 ? '' : 's'}',
-                                    style: const TextStyle(fontSize: 13),
-                                  ),
-                                ),
-                              ),
-                              onChanged: (val) =>
-                                  setState(() => _stopCount = val!),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+            DateStopsPicker(
+              selectedDate: _selectedDate,
+              stopCount: _stopCount,
+              onDatePicked: (d) => setState(() => _selectedDate = d),
+              onStopCountChanged: (v) => setState(() => _stopCount = v),
             ),
-
             const SizedBox(height: 12),
-
-            // ── Preferences card ─────────────────────────────────────────────
-            _SectionCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _SectionLabel(
-                    label: 'Favorites & Preferences',
-                    icon: Icons.favorite_border,
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'Choose what you enjoy to personalise your route',
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
-                  const SizedBox(height: 16),
-                  ..._favoriteCategories.map((cat) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          cat['title'],
-                          style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black54,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: (cat['options'] as List).map((opt) {
-                            final bool isSelected = _selectedFavorites.contains(
-                              opt['id'],
-                            );
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  if (isSelected)
-                                    _selectedFavorites.remove(opt['id']);
-                                  else
-                                    _selectedFavorites.add(opt['id']);
-                                });
-                              },
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 10,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? AppColors.lowPrimaryColor
-                                      : AppColors.chipBackground,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(
-                                  opt['label'],
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: isSelected
-                                        ? FontWeight.w600
-                                        : FontWeight.w400,
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Colors.black87,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    );
-                  }).toList(),
-                ],
-              ),
+            PreferencesCard(
+              selectedFavorites: _selectedFavorites,
+              onToggle: (id) => setState(() {
+                _selectedFavorites.contains(id)
+                    ? _selectedFavorites.remove(id)
+                    : _selectedFavorites.add(id);
+              }),
             ),
-
             const SizedBox(height: 24),
-
-            // ── Generate Button ──────────────────────────────────────────────
             SizedBox(
               width: double.infinity,
               height: 56,
@@ -547,62 +238,10 @@ class _NewTripScreenState extends State<NewTripScreen> {
                       ),
               ),
             ),
-
             const SizedBox(height: 30),
           ],
         ),
       ),
-    );
-  }
-}
-
-// ── Helper widgets ─────────────────────────────────────────────────────────────
-
-class _SectionCard extends StatelessWidget {
-  final Widget child;
-  const _SectionCard({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: child,
-    );
-  }
-}
-
-class _SectionLabel extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  const _SectionLabel({required this.label, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 16, color: AppColors.primaryColor),
-        const SizedBox(width: 6),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: Colors.black87,
-          ),
-        ),
-      ],
     );
   }
 }

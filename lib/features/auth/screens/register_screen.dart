@@ -25,67 +25,69 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       resizeToAvoidBottomInset: true,
-      body: Consumer<AuthController>(
-        builder: (context, authProvider, child) {
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: Image.asset(
-                  AppAssets.loginBack,
-                  filterQuality: FilterQuality.high,
-                  fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          RepaintBoundary(
+            child: Image.asset(
+              AppAssets.loginBack,
+              filterQuality: FilterQuality.low,
+              fit: BoxFit.cover,
+              width: size.width,
+              height: size.height,
+            ),
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                Image.asset(
+                  AppAssets.logo,
+                  color: AppColors.black,
+                  width: 43,
+                  height: 33,
                 ),
-              ),
-              SafeArea(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    Image.asset(
-                      AppAssets.logo,
-                      color: AppColors.black,
-                      width: isTablet ? 60 : 43,
-                      height: isTablet ? 50 : 33,
-                    ),
-                    const Text(
-                      'Ride\nLanka',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        height: 1.2,
+                const Text(
+                  'Ride\nLanka',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    height: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: isTablet ? 550 : double.infinity,
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: Container(
-                          constraints: BoxConstraints(
-                            maxWidth: isTablet ? 550 : double.infinity,
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 25,
+                        vertical: isTablet ? 40 : 25,
+                      ),
+                      decoration: const BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(50),
+                          bottomRight: Radius.circular(20),
+                          bottomLeft: Radius.circular(50),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 15,
+                            offset: Offset(0, 5),
                           ),
-                          margin: const EdgeInsets.symmetric(horizontal: 20),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 25,
-                            vertical: isTablet ? 40 : 25,
-                          ),
-                          decoration: const BoxDecoration(
-                            color: AppColors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(50),
-                              bottomRight: Radius.circular(20),
-                              bottomLeft: Radius.circular(50),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 15,
-                                offset: Offset(0, 5),
-                              ),
-                            ],
-                          ),
-                          child: SingleChildScrollView(
-                            child: Form(
+                        ],
+                      ),
+                      child: SingleChildScrollView(
+                        child: Consumer<AuthController>(
+                          builder: (context, authProvider, child) {
+                            return Form(
                               key: _formKey,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,17 +184,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                 ],
                               ),
-                            ),
-                          ),
+                            );
+                          },
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

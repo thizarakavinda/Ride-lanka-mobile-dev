@@ -10,10 +10,13 @@ class WishlistProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   WishlistProvider() {
-    _loadFavorites();
+    loadFavorites();
   }
 
-  Future<void> _loadFavorites() async {
+  Future<void> loadFavorites({bool force = false}) async {
+    if (!force && _favoriteIds.isNotEmpty) {
+      return;
+    }
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
 

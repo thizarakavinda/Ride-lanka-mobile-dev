@@ -55,7 +55,10 @@ class HomeProvider extends ChangeNotifier {
   String _currentLocationName = 'Location Unknown';
   String get currentLocationName => _currentLocationName;
 
-  Future<void> fetchHomeData() async {
+  Future<void> fetchHomeData({bool force = false}) async {
+    if (!force && _nearbyPlaces.isNotEmpty && _popularPlaces.isNotEmpty) {
+      return;
+    }
     try {
       _isLoading = true;
       _errorMessage = null;
@@ -201,9 +204,20 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _categoryPlaces = await _homeService.fetchExplorePlacesByCategory(
-        category,
-      );
+      if (_allExplorePlaces.isNotEmpty) {
+        // Filter locally if already have the data
+        final lowerCategory = category.toLowerCase();
+        final keywords = _getKeywordsForCategory(lowerCategory);
+
+        _categoryPlaces = _allExplorePlaces.where((p) {
+          final text = '${p.title} ${p.snippet} ${p.content}'.toLowerCase();
+          return keywords.any((kw) => text.contains(kw));
+        }).toList();
+      } else {
+        _categoryPlaces = await _homeService.fetchExplorePlacesByCategory(
+          category,
+        );
+      }
     } catch (e) {
       _logger.e('fetchExplorePlacesByCategory error: $e');
       _categoryPlaces = [];
@@ -279,5 +293,45 @@ class HomeProvider extends ChangeNotifier {
       if (position != null) return position;
       return Future.error('Failed to get location: $e');
     }
+  }
+
+  List<String> _getKeywordsForCategory(String lowerCategory) {
+    const Map<String, List<String>> categoryKeywords = {
+      'beach': ['beach', 'coast', 'shore', 'surf', 'bay', 'lagoon'],
+      'mountain': [
+        'mountain',
+        'peak',
+        'rock',
+        'hill',
+        'ella',
+        'adams',
+        'knuckles',
+      ],
+      'culture': [
+        'temple',
+        'fort',
+        'ancient',
+        'relic',
+        'culture',
+        'cultural',
+        'heritage',
+        'stupa',
+        'sacred',
+        'buddhist',
+        'hindu',
+        'mosque',
+      ],
+      'waterfall': ['waterfall', 'falls', 'cascade'],
+      'wildlife': [
+        'wildlife',
+        'safari',
+        'leopard',
+        'elephant',
+        'national park',
+        'bird',
+        'nature reserve',
+      ],
+    };
+    return categoryKeywords[lowerCategory] ?? [lowerCategory];
   }
 }

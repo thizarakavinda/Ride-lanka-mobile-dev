@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:ride_lanka/features/trip/providers/trip_provider.dart';
-import 'package:ride_lanka/routes/app_routes.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:provider/provider.dart';
 import 'package:ride_lanka/core/constants/app_colors.dart';
-// We make this below
+import 'package:ride_lanka/features/trip/providers/trip_provider.dart';
+import 'package:ride_lanka/features/trip/widgets/trip%20plan/trip_filter_chips.dart';
+import 'package:ride_lanka/features/trip/widgets/trip%20plan/trip_list_card.dart';
+
+import 'package:ride_lanka/routes/app_routes.dart';
+import 'package:shimmer/shimmer.dart';
 
 class TripPlanScreen extends StatefulWidget {
+  const TripPlanScreen({super.key});
+
   @override
-  _TripPlanScreenState createState() => _TripPlanScreenState();
+  State<TripPlanScreen> createState() => _TripPlanScreenState();
 }
 
 class _TripPlanScreenState extends State<TripPlanScreen> {
   String selectedFilter = 'All';
   final List<String> filters = ['All', 'Upcoming', 'Active', 'Completed'];
-
   GoogleMapController? _mapController;
   Position? _currentPosition;
 
@@ -30,26 +33,20 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
   }
 
   Future<void> _getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) return;
 
-    permission = await Geolocator.checkPermission();
+    LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) return;
     }
-
     if (permission == LocationPermission.deniedForever) return;
 
     try {
       final position = await Geolocator.getCurrentPosition();
       if (mounted) {
-        setState(() {
-          _currentPosition = position;
-        });
+        setState(() => _currentPosition = position);
         _mapController?.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
@@ -80,10 +77,9 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
         elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(Icons.add_circle, color: Colors.teal, size: 28),
-            onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.newTrpPlanScreen);
-            },
+            icon: const Icon(Icons.add_circle, color: Colors.teal, size: 28),
+            onPressed: () =>
+                Navigator.pushNamed(context, AppRoutes.newTrpPlanScreen),
           ),
         ],
       ),
@@ -93,22 +89,20 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
             return ListView.builder(
               itemCount: 5,
               padding: EdgeInsets.zero,
-              itemBuilder: (context, index) {
-                return Shimmer.fromColors(
-                  baseColor: Colors.grey.shade300,
-                  highlightColor: Colors.grey.shade100,
-                  child: Card(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Container(height: 110, width: double.infinity),
+              itemBuilder: (_, __) => Shimmer.fromColors(
+                baseColor: Colors.grey.shade300,
+                highlightColor: Colors.grey.shade100,
+                child: Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
                   ),
-                );
-              },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Container(height: 110, width: double.infinity),
+                ),
+              ),
             );
           }
 
@@ -123,7 +117,6 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
             builder: (context, constraints) {
               return Stack(
                 children: [
-                  // Google Map showing Current Location (Bottom Layer)
                   Positioned(
                     top: 0,
                     left: 0,
@@ -139,10 +132,7 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
                               zoom: 14.0,
                             )
                           : const CameraPosition(
-                              target: LatLng(
-                                6.9271,
-                                79.8612,
-                              ), // Default to Colombo
+                              target: LatLng(6.9271, 79.8612),
                               zoom: 10.0,
                             ),
                       myLocationEnabled: true,
@@ -166,8 +156,6 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
                       },
                     ),
                   ),
-
-                  // Rounded Container Overlapping the Map
                   Positioned(
                     top: constraints.maxHeight * 0.45,
                     left: 0,
@@ -190,7 +178,6 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Drag Handle Indicator
                           Center(
                             child: Container(
                               margin: const EdgeInsets.only(top: 16, bottom: 8),
@@ -202,266 +189,43 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
                               ),
                             ),
                           ),
-
-                          // Filter Chips
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                            child: Row(
-                              children: filters.map((filter) {
-                                final isSelected = selectedFilter == filter;
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        selectedFilter = filter;
-                                      });
-                                    },
-                                    child: AnimatedContainer(
-                                      duration: const Duration(
-                                        milliseconds: 200,
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 18,
-                                        vertical: 10,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: isSelected
-                                            ? AppColors.primaryColor
-                                            : Colors.transparent,
-                                        border: Border.all(
-                                          color: isSelected
-                                              ? AppColors.primaryColor
-                                              : AppColors.grey,
-                                        ),
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      child: Text(
-                                        filter,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: isSelected
-                                              ? FontWeight.w600
-                                              : FontWeight.w400,
-                                          color: isSelected
-                                              ? Colors.white
-                                              : const Color.fromARGB(
-                                                  255,
-                                                  90,
-                                                  90,
-                                                  90,
-                                                ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
+                          TripFilterChips(
+                            selectedFilter: selectedFilter,
+                            filters: filters,
+                            onFilterChanged: (f) =>
+                                setState(() => selectedFilter = f),
                           ),
-
-                          // Trips List
                           Expanded(
                             child: displayedTrips.isEmpty
                                 ? const Center(
                                     child: Text(
-                                      "No trips found. Click + to generate one!",
+                                      'No trips found. Click + to generate one!',
                                     ),
                                   )
-                                : ListView.builder(
-                                    itemCount: displayedTrips.length,
-                                    padding: const EdgeInsets.only(top: 0),
-                                    itemBuilder: (context, index) {
-                                      final trip = displayedTrips[index];
-                                      return Card(
-                                        color: AppColors.white,
-                                        margin: const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                          vertical: 8,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            16,
+                                : RefreshIndicator(
+                                    onRefresh: () => provider.fetchUserTrips(
+                                      force: true,
+                                    ),
+                                    color: AppColors.primaryColor,
+                                    child: ListView.builder(
+                                      itemCount: displayedTrips.length,
+                                      padding: const EdgeInsets.only(top: 0),
+                                      physics:
+                                          const AlwaysScrollableScrollPhysics(
+                                        parent: BouncingScrollPhysics(),
+                                      ),
+                                      itemBuilder: (context, index) {
+                                        final trip = displayedTrips[index];
+                                        return TripListCard(
+                                          trip: trip,
+                                          onTap: () => Navigator.pushNamed(
+                                            context,
+                                            AppRoutes.tripDetails,
+                                            arguments: {'trip': trip},
                                           ),
-                                        ),
-                                        elevation: 2,
-                                        child: InkWell(
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
-                                          onTap: () {
-                                            Navigator.pushNamed(
-                                              context,
-                                              AppRoutes.tripDetails,
-                                              arguments: {'trip': trip},
-                                            );
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(16.0),
-                                            child: Row(
-                                              children: [
-                                                // Placeholder Image
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  child: Image.network(
-                                                    trip.stops.isNotEmpty &&
-                                                            trip
-                                                                    .stops[0]
-                                                                    .photoUrl !=
-                                                                null
-                                                        ? trip
-                                                              .stops[0]
-                                                              .photoUrl!
-                                                        : 'https://images.unsplash.com/photo-1544487661-04e8d38cb71f?w=300&q=80',
-                                                    height: 80,
-                                                    width: 80,
-                                                    fit: BoxFit.cover,
-                                                    loadingBuilder:
-                                                        (
-                                                          context,
-                                                          child,
-                                                          loadingProgress,
-                                                        ) {
-                                                          if (loadingProgress ==
-                                                              null)
-                                                            return child;
-                                                          return Shimmer.fromColors(
-                                                            baseColor: Colors
-                                                                .grey
-                                                                .shade300,
-                                                            highlightColor:
-                                                                Colors
-                                                                    .grey
-                                                                    .shade100,
-                                                            child: Container(
-                                                              height: 80,
-                                                              width: 80,
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          );
-                                                        },
-                                                    errorBuilder:
-                                                        (
-                                                          context,
-                                                          error,
-                                                          stackTrace,
-                                                        ) {
-                                                          return Image.asset(
-                                                            'assets/images/imgplaceholder.jpg',
-                                                            height: 80,
-                                                            width: 80,
-                                                            fit: BoxFit.cover,
-                                                          );
-                                                        },
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 16),
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        trip.tripName,
-                                                        style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(height: 4),
-                                                      Row(
-                                                        children: [
-                                                          Icon(
-                                                            Icons
-                                                                .calendar_month,
-                                                            size: 16,
-                                                            color: AppColors
-                                                                .forgotPasswordText,
-                                                          ),
-                                                          Text(
-                                                            ' ${trip.tripDate}',
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey
-                                                                  .shade600,
-                                                              fontSize: 13,
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 4,
-                                                          ),
-                                                          Icon(
-                                                            Icons.location_on,
-                                                            size: 16,
-                                                            color: AppColors
-                                                                .favoriteColor,
-                                                          ),
-                                                          Text(
-                                                            '${trip.stopCount} stops',
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .grey
-                                                                  .shade600,
-                                                              fontSize: 13,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(height: 8),
-                                                      Container(
-                                                        padding:
-                                                            const EdgeInsets.symmetric(
-                                                              horizontal: 10,
-                                                              vertical: 4,
-                                                            ),
-                                                        decoration: BoxDecoration(
-                                                          color:
-                                                              trip.status ==
-                                                                  'Active'
-                                                              ? Colors.green
-                                                              : AppColors.white,
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                20,
-                                                              ),
-                                                        ),
-                                                        child: Text(
-                                                          trip.status,
-                                                          style: TextStyle(
-                                                            color:
-                                                                trip.status ==
-                                                                    'Active'
-                                                                ? Colors.white
-                                                                : Colors
-                                                                      .teal
-                                                                      .shade900,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 12,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const Icon(
-                                                  Icons.chevron_right,
-                                                  color: Colors.grey,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
+                                        );
+                                      },
+                                    ),
                                   ),
                           ),
                         ],

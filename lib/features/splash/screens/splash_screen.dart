@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ride_lanka/core/constants/app_assets.dart';
@@ -18,7 +19,40 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _handleSplashNavigation();
+    _checkConnectivityAndNavigate();
+  }
+
+  Future<void> _checkConnectivityAndNavigate() async {
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult.contains(ConnectivityResult.none)) {
+      if (!mounted) return;
+      _showNoInternetDialog();
+    } else {
+      _handleSplashNavigation();
+    }
+  }
+
+  void _showNoInternetDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('No Internet Connection'),
+        content: const Text(
+          'Please check your internet connection to continue. Some features may not work offline.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _checkConnectivityAndNavigate();
+            },
+            child: const Text('Retry'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _handleSplashNavigation() async {

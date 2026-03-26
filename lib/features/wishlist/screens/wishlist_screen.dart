@@ -7,6 +7,7 @@ import 'package:ride_lanka/features/wishlist/providers/wishlist_provider.dart';
 import 'package:ride_lanka/features/home/widgets/popular_place_card.dart';
 import 'package:ride_lanka/features/wishlist/widgets/category_filter_row.dart';
 import 'package:ride_lanka/widgets/custom_search_bar.dart';
+import 'package:shimmer/shimmer.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -137,7 +138,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
-        top: false,
+        top: true,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           child: Column(
@@ -162,48 +163,80 @@ class _WishlistScreenState extends State<WishlistScreen> {
               ),
               const SizedBox(height: 20),
               if (homeProvider.isLoading || wishlistProvider.isLoading)
-                const Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.lowPrimaryColor,
-                    ),
-                  ),
-                )
-              else if (displayList.isEmpty)
-                const Expanded(
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.favorite_border,
-                          size: 60,
-                          color: AppColors.grey,
+                Expanded(
+                  child: ListView.separated(
+                    padding: EdgeInsets.zero,
+                    itemCount: 5,
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    itemBuilder: (_, __) => Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                        SizedBox(height: 12),
-                        Text(
-                          'No wishlist yet',
-                          style: TextStyle(color: AppColors.grey, fontSize: 16),
-                        ),
-                      ],
+                        child: Container(height: 100, width: double.infinity),
+                      ),
                     ),
                   ),
                 )
               else
                 Expanded(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: displayList.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      return PopularPlaceCard(
-                        isWishlist: true,
-                        place: displayList[index],
-                      );
-                    },
-                  ),
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    await Future.wait([
+                      homeProvider.fetchHomeData(force: true),
+                      wishlistProvider.loadFavorites(force: true),
+                    ]);
+                  },
+                  color: AppColors.primaryColor,
+                  child: displayList.isEmpty
+                      ? ListView(
+                          physics: const AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics(),
+                          ),
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.4,
+                              child: const Center(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.favorite_border,
+                                      size: 60,
+                                      color: AppColors.grey,
+                                    ),
+                                    SizedBox(height: 12),
+                                    Text(
+                                      'No wishlist yet',
+                                      style: TextStyle(
+                                        color: AppColors.grey,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : ListView.separated(
+                          physics: const AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics(),
+                          ),
+                          itemCount: displayList.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 12),
+                          itemBuilder: (context, index) {
+                            return PopularPlaceCard(
+                              isWishlist: true,
+                              place: displayList[index],
+                            );
+                          },
+                        ),
                 ),
+              ),
             ],
           ),
         ),

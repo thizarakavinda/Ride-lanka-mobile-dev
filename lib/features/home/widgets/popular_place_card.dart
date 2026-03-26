@@ -33,7 +33,6 @@ class _PopularPlaceCardState extends State<PopularPlaceCard> {
       },
       child: Card(
         color: AppColors.white,
-
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         elevation: 1,
         child: Padding(
@@ -77,11 +76,15 @@ class _PopularPlaceCardState extends State<PopularPlaceCard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          widget.place.title,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                        Flexible(
+                          child: Text(
+                            widget.place.title,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
                         ),
                         Row(
@@ -100,7 +103,7 @@ class _PopularPlaceCardState extends State<PopularPlaceCard> {
                                   ),
                                 ),
                               ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             GestureDetector(
                               onTap: () {
                                 context.read<WishlistProvider>().toggleFavorite(
@@ -142,7 +145,12 @@ class _PopularPlaceCardState extends State<PopularPlaceCard> {
                           size: 14,
                           color: AppColors.grey,
                         ),
-                        Text(" ${widget.place.distance}"),
+                        Flexible(
+                          child: Text(
+                            " ${widget.place.distance}",
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 4),
@@ -153,11 +161,14 @@ class _PopularPlaceCardState extends State<PopularPlaceCard> {
                           color: AppColors.grey,
                           size: 14,
                         ),
-                        Text(
-                          widget.place.location,
-                          style: const TextStyle(
-                            color: AppColors.dividerText,
-                            fontSize: 13,
+                        Flexible(
+                          child: Text(
+                            widget.place.location,
+                            style: const TextStyle(
+                              color: AppColors.dividerText,
+                              fontSize: 13,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],

@@ -30,72 +30,73 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: AppColors.white,
 
       resizeToAvoidBottomInset: false,
-      body: Consumer<AuthController>(
-        builder: (context, authController, child) {
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: Image.asset(
-                  AppAssets.loginBack,
-                  filterQuality: FilterQuality.high,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              SafeArea(
-                child: Center(
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
+        children: [
+          RepaintBoundary(
+            child: Image.asset(
+              AppAssets.loginBack,
+              filterQuality: FilterQuality.low,
+              fit: BoxFit.cover,
+              width: size.width,
+              height: size.height,
+            ),
+          ),
+          SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
                       children: [
-                        Column(
-                          children: [
-                            Image.asset(
-                              AppAssets.logo,
-                              color: AppColors.black,
-                              width: isTablet ? 60 : 43,
-                              height: isTablet ? 50 : 33,
-                            ),
-                            const Text(
-                              'Ride\nLanka',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                height: 1.2,
-                              ),
-                            ),
-                          ],
+                        Image.asset(
+                          AppAssets.logo,
+                          color: AppColors.black,
+                          width: 43,
+                          height: 33,
                         ),
-                        const SizedBox(height: 20),
-
-                        Container(
-                          constraints: BoxConstraints(
-                            maxWidth: isTablet ? 500 : double.infinity,
+                        const Text(
+                          'Ride\nLanka',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            height: 1.2,
                           ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 25,
-                            vertical: isTablet ? 40 : 30,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      constraints: BoxConstraints(
+                        maxWidth: isTablet ? 500 : double.infinity,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 25,
+                        vertical: isTablet ? 40 : 30,
+                      ),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      decoration: const BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(50),
+                          bottomRight: Radius.circular(20),
+                          bottomLeft: Radius.circular(50),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 15,
+                            offset: Offset(0, 5),
                           ),
-                          margin: const EdgeInsets.symmetric(horizontal: 20),
-                          decoration: const BoxDecoration(
-                            color: AppColors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(50),
-                              bottomRight: Radius.circular(20),
-                              bottomLeft: Radius.circular(50),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 15,
-                                offset: Offset(0, 5),
-                              ),
-                            ],
-                          ),
-                          child: Form(
+                        ],
+                      ),
+                      child: Consumer<AuthController>(
+                        builder: (context, authController, child) {
+                          return Form(
                             key: _formKey,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -155,16 +156,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                      ],
+                          );
+                        },
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-            ],
-          );
-        },
+            ),
+          ),
+        ],
       ),
     );
   }

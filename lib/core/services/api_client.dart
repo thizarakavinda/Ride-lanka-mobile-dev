@@ -15,9 +15,21 @@ class ApiClient {
     };
   }
 
-  static Future<http.Response> get(String path) async {
+  static Future<http.Response> get(String path, {int retries = 3}) async {
     final headers = await _authHeaders();
-    return http.get(Uri.parse('$baseUrl$path'), headers: headers);
+    final url = Uri.parse('$baseUrl$path');
+
+    for (int i = 0; i < retries; i++) {
+      try {
+        return await http
+            .get(url, headers: headers)
+            .timeout(const Duration(seconds: 15));
+      } catch (e) {
+        if (i == retries - 1) rethrow;
+        await Future.delayed(Duration(seconds: 1 * (i + 1)));
+      }
+    }
+    throw Exception('Failed to get $path after $retries retries');
   }
 
   static Future<http.Response> post(
@@ -25,11 +37,13 @@ class ApiClient {
     Map<String, dynamic> body,
   ) async {
     final headers = await _authHeaders();
-    return http.post(
-      Uri.parse('$baseUrl$path'),
-      headers: headers,
-      body: jsonEncode(body),
-    );
+    return http
+        .post(
+          Uri.parse('$baseUrl$path'),
+          headers: headers,
+          body: jsonEncode(body),
+        )
+        .timeout(const Duration(seconds: 15));
   }
 
   static Future<http.Response> put(
@@ -37,10 +51,12 @@ class ApiClient {
     Map<String, dynamic> body,
   ) async {
     final headers = await _authHeaders();
-    return http.put(
-      Uri.parse('$baseUrl$path'),
-      headers: headers,
-      body: jsonEncode(body),
-    );
+    return http
+        .put(
+          Uri.parse('$baseUrl$path'),
+          headers: headers,
+          body: jsonEncode(body),
+        )
+        .timeout(const Duration(seconds: 15));
   }
 }

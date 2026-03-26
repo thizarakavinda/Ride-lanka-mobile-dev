@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:ride_lanka/features/edit%20profile/providers/profile_provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -81,6 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 250, 250, 250),
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,

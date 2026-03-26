@@ -5,6 +5,8 @@ import 'package:ride_lanka/core/services/api_client.dart';
 import 'package:ride_lanka/features/home/models/explore_place_model.dart';
 
 class HomeService {
+  List<ExplorePlaceModel>? _cachedExplorePlaces;
+
   Future<List<QueryDocumentSnapshot>> fetchPlaces() async {
     final snapshot = await FirebaseFirestore.instance
         .collection('places')
@@ -12,14 +14,19 @@ class HomeService {
     return snapshot.docs;
   }
 
-  Future<List<ExplorePlaceModel>> fetchExplorePlaces() async {
+  Future<List<ExplorePlaceModel>> fetchExplorePlaces({bool force = false}) async {
+    if (!force && _cachedExplorePlaces != null) {
+      return _cachedExplorePlaces!;
+    }
+
     final response = await ApiClient.get('/api/explore');
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final List<dynamic> places = data['places'] ?? [];
-      return places
+      _cachedExplorePlaces = places
           .map((p) => ExplorePlaceModel.fromMap(p['id'] ?? '', p))
           .toList();
+      return _cachedExplorePlaces!;
     }
     throw Exception('Failed to load explore places: ${response.statusCode}');
   }
