@@ -27,7 +27,6 @@ class CategoryItem extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: radius,
-            // Highlighted when selected, default teal otherwise
             backgroundColor: isSelected
                 ? const Color(0xFF2A7A8C)
                 : const Color(0xFF5BA3B2),
@@ -35,7 +34,7 @@ class CategoryItem extends StatelessWidget {
               icon,
               width: radius * 0.85,
               height: radius * 0.85,
-              // Slightly brighter icon when selected
+
               colorFilter: ColorFilter.mode(
                 isSelected ? Colors.white : Colors.white.withOpacity(0.9),
                 BlendMode.srcIn,

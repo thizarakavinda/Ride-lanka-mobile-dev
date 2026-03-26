@@ -255,7 +255,7 @@ class PlaceDetailsInfoCard extends StatelessWidget {
                 ? Colors.grey.shade400
                 : Colors.grey.shade700),
         size: 20,
-      ), // Favorite icon is grey in design until filled
+      ),
     );
   }
 }

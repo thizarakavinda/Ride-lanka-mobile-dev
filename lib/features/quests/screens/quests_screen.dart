@@ -185,7 +185,6 @@ class _QuestsScreenState extends State<QuestsScreen> {
 
             Consumer<QuestProvider>(
               builder: (context, provider, child) {
-                // ── Loading shimmer ──────────────────────────────────────────
                 if (provider.isLoading) {
                   return Expanded(
                     child: ListView.separated(
@@ -196,7 +195,6 @@ class _QuestsScreenState extends State<QuestsScreen> {
                   );
                 }
 
-                // ── Empty state ──────────────────────────────────────────────
                 if (provider.allQuests.isEmpty) {
                   return const Expanded(
                     child: Center(

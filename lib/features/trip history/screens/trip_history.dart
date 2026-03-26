@@ -72,7 +72,7 @@ class _TripHistoryState extends State<TripHistory> {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false, // Prevent back button if not needed
+
         title: Text(
           'Trip History',
           style: TextStyle(

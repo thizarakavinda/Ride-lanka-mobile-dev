@@ -13,14 +13,12 @@ class HomeProvider extends ChangeNotifier {
   final HomeService _homeService = HomeService();
   final Logger _logger = Logger();
 
-  // ── Nearby / Popular ──────────────────────────────────────────────────────
   List<NearbyPlaceModel> _nearbyPlaces = [];
   List<NearbyPlaceModel> get nearbyPlaces => _nearbyPlaces;
 
   List<PopularPlaceModel> _popularPlaces = [];
   List<PopularPlaceModel> get popularPlaces => _popularPlaces;
 
-  // ── Category filter ───────────────────────────────────────────────────────
   String? _selectedCategory;
   String? get selectedCategory => _selectedCategory;
 
@@ -30,7 +28,6 @@ class HomeProvider extends ChangeNotifier {
   bool _isCategoryLoading = false;
   bool get isCategoryLoading => _isCategoryLoading;
 
-  // ── Explore / Search ──────────────────────────────────────────────────────
   List<ExplorePlaceModel> _allExplorePlaces = [];
   List<ExplorePlaceModel> get allExplorePlaces => _allExplorePlaces;
 
@@ -43,7 +40,6 @@ class HomeProvider extends ChangeNotifier {
   String _searchQuery = '';
   String get searchQuery => _searchQuery;
 
-  // ── General ───────────────────────────────────────────────────────────────
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -59,14 +55,12 @@ class HomeProvider extends ChangeNotifier {
   String _currentLocationName = 'Location Unknown';
   String get currentLocationName => _currentLocationName;
 
-  // ── Fetch home data (Nearby + Popular from `places`) ─────────────────────
   Future<void> fetchHomeData() async {
     try {
       _isLoading = true;
       _errorMessage = null;
       notifyListeners();
 
-      // Fetch user name from Firestore users collection
       try {
         final uid = FirebaseAuth.instance.currentUser?.uid;
         if (uid != null) {
@@ -90,7 +84,6 @@ class HomeProvider extends ChangeNotifier {
         _logger.e('fetchUserName error: $e');
       }
 
-      // Fetch location
       Position? position;
       try {
         position = await _determinePosition();
@@ -124,7 +117,6 @@ class HomeProvider extends ChangeNotifier {
         _currentLocationName = 'Unknown Location';
       }
 
-      // Fetch places
       final docs = await _homeService.fetchPlaces();
       final List<Map<String, dynamic>> placesWithDistances = [];
 
@@ -153,7 +145,6 @@ class HomeProvider extends ChangeNotifier {
         });
       }
 
-      // Sort Nearby — closest first
       final nearbyList = List<Map<String, dynamic>>.from(placesWithDistances);
       nearbyList.sort(
         (a, b) => (a['distance'] as double).compareTo(b['distance'] as double),
@@ -168,7 +159,6 @@ class HomeProvider extends ChangeNotifier {
           )
           .toList();
 
-      // Sort Popular — highest popularityScore first
       final popularList = List<Map<String, dynamic>>.from(placesWithDistances);
       popularList.sort(
         (a, b) => (b['popularity'] as num).compareTo(a['popularity'] as num),
@@ -182,13 +172,11 @@ class HomeProvider extends ChangeNotifier {
           )
           .toList();
 
-      // Fetch explore places for local querying (Search + Wishlist)
       try {
         _allExplorePlaces = await _homeService.fetchExplorePlaces();
       } catch (e) {
         _logger.e('fetchAllExplorePlaces error: $e');
       }
-
     } catch (e) {
       _logger.e('fetchHomeData error: $e');
       _errorMessage = e.toString();
@@ -198,9 +186,7 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
-  // ── Category filter ───────────────────────────────────────────────────────
   Future<void> selectCategory(String category) async {
-    // Tap same category again → deselect
     if (_selectedCategory == category) {
       _selectedCategory = null;
       _categoryPlaces = [];
@@ -227,7 +213,6 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
-  // ── Search ────────────────────────────────────────────────────────────────
   Future<void> searchPlaces(String query) async {
     _searchQuery = query;
 
@@ -265,7 +250,6 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Location ──────────────────────────────────────────────────────────────
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -288,12 +272,9 @@ class HomeProvider extends ChangeNotifier {
     try {
       return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.low,
-        timeLimit: const Duration(
-          seconds: 5,
-        ), // Added timeout to prevent hanging
+        timeLimit: const Duration(seconds: 5),
       );
     } catch (e) {
-      // Fallback to last known position if current position times out or fails
       final position = await Geolocator.getLastKnownPosition();
       if (position != null) return position;
       return Future.error('Failed to get location: $e');

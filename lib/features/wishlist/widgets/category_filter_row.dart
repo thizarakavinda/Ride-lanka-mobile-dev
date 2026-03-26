@@ -26,7 +26,6 @@ class CategoryFilterRow extends StatelessWidget {
       children: [
         // _FilterButton(),
         // const SizedBox(width: 8),
-
         Expanded(
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,

@@ -128,12 +128,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   return ProfileHeader(
                     imageUrl: profileProvider.photoUrl.isNotEmpty
                         ? profileProvider.photoUrl
-                        : homeProvider.userEmail, // fallback
+                        : homeProvider.userEmail,
                     userName: profileProvider.name.isNotEmpty
                         ? profileProvider.name
                         : homeProvider.userName,
                     userEmail: homeProvider.userEmail,
-                    xp: profileProvider.xp, // TODO: wire real XP
+                    xp: profileProvider.xp,
                     onLogout: () {
                       Provider.of<AuthController>(
                         context,

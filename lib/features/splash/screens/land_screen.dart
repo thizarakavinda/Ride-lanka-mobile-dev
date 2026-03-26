@@ -21,7 +21,6 @@ class _LandScreenState extends State<LandScreen> {
       backgroundColor: AppColors.primaryColor,
       body: Stack(
         children: [
-          /// Background
           Positioned.fill(
             child: Image.asset(
               AppAssets.landBack,
@@ -30,7 +29,6 @@ class _LandScreenState extends State<LandScreen> {
             ),
           ),
 
-          /// Logo Section (Responsive Center)
           SafeArea(
             child: Column(
               children: [
@@ -61,7 +59,6 @@ class _LandScreenState extends State<LandScreen> {
             ),
           ),
 
-          /// Bottom Card
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -87,7 +84,6 @@ class _LandScreenState extends State<LandScreen> {
                       ),
                     ),
 
-                    /// Button
                     GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, AppRoutes.login);

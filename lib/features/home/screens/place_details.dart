@@ -49,7 +49,6 @@ class _PlaceDetailsState extends State<PlaceDetails> {
         final lng = locations.first.longitude;
 
         setState(() {
-          // Yandex static map URL (free, no API key required for small usage)
           _mapUrl =
               'https://static-maps.yandex.ru/1.x/?ll=$lng,$lat&size=600,300&z=13&l=map&pt=$lng,$lat,pm2rdm';
           _isLoadingMap = false;
@@ -67,7 +66,6 @@ class _PlaceDetailsState extends State<PlaceDetails> {
     });
   }
 
-  // Helper to extract common properties safely
   String _getId(dynamic place) {
     if (place is NearbyPlaceModel) return place.id;
     if (place is PopularPlaceModel) return place.id;
@@ -144,7 +142,6 @@ class _PlaceDetailsState extends State<PlaceDetails> {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Background Image
           Positioned(
             top: 0,
             left: 0,
@@ -210,12 +207,11 @@ class _PlaceDetailsState extends State<PlaceDetails> {
             ),
           ),
 
-          // Top Info Container
           Positioned(
             top: size.height * 0.38,
             left: 0,
             right: 0,
-            bottom: 90, // Space for bottom bar
+            bottom: 90,
             child: PlaceDetailsInfoCard(
               id: id,
               category: category,
@@ -230,7 +226,6 @@ class _PlaceDetailsState extends State<PlaceDetails> {
             ),
           ),
 
-          // Bottom Bar
           Positioned(
             bottom: 0,
             left: 0,

@@ -1,10 +1,9 @@
 import 'dart:convert';
-import 'package:ride_lanka/core/services/api_client.dart'; // Ensure path is correct for ApiClient
+import 'package:ride_lanka/core/services/api_client.dart';
 import 'package:ride_lanka/features/trip/models/trip_model.dart';
 
 class TripService {
   Future<List<TripModel>> getUserTrips() async {
-    // Note: Ensuring the endpoint matches the web exactly
     final response = await ApiClient.get('/api/users/trips');
 
     if (response.statusCode == 200) {
@@ -21,8 +20,6 @@ class TripService {
     required int stopCount,
     required List<String> favorites,
   }) async {
-    // 1. CHANGED ENDPOINT from /generate to /plan
-    // 2. REMOVED route_preference from the map body!
     final response = await ApiClient.post('/api/users/trips/plan', {
       'trip_name': tripName,
       'trip_date': tripDate,

@@ -60,7 +60,7 @@ class AvatarPicker extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: AppColors.primaryColor,
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
+                      border: Border.all(color: AppColors.white, width: 2),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.15),
@@ -71,7 +71,7 @@ class AvatarPicker extends StatelessWidget {
                     child: const Icon(
                       Icons.camera_alt_rounded,
                       size: 16,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),

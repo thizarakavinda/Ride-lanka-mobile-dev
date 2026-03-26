@@ -21,7 +21,10 @@ class WishlistProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
       if (doc.exists && doc.data()!.containsKey('wishlist')) {
         final List<dynamic> list = doc.data()!['wishlist'];
         _favoriteIds = list.map((e) => e.toString()).toSet();
@@ -48,7 +51,6 @@ class WishlistProvider extends ChangeNotifier {
       return;
     }
 
-    // Optimistic UI update
     final isAdding = !_favoriteIds.contains(id);
     if (isAdding) {
       _favoriteIds.add(id);
@@ -58,18 +60,19 @@ class WishlistProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
+      final userRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid);
       if (isAdding) {
         await userRef.set({
-          'wishlist': FieldValue.arrayUnion([id])
+          'wishlist': FieldValue.arrayUnion([id]),
         }, SetOptions(merge: true));
       } else {
         await userRef.set({
-          'wishlist': FieldValue.arrayRemove([id])
+          'wishlist': FieldValue.arrayRemove([id]),
         }, SetOptions(merge: true));
       }
     } catch (e) {
-      // Revert on failure
       if (isAdding) {
         _favoriteIds.remove(id);
       } else {

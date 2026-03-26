@@ -71,7 +71,7 @@ class TripProvider extends ChangeNotifier {
       );
       final newTrip = await _tripService.saveUserTrip(trip);
       myTrips.insert(0, newTrip);
-      generatedStops.clear(); // clear state after saving
+      generatedStops.clear();
       notifyListeners();
     } catch (e) {
       debugPrint("Error saving trip to database: $e");
