@@ -23,13 +23,12 @@ class UserModel {
     required this.createdAt,
   });
 
-  // Used when sending to backend POST /api/users/profile
-  // Backend accepts: { name, interests }
+  // used when sending to backend POST /api/users/profile
   Map<String, dynamic> toProfilePayload() {
     return {'name': '$firstName $lastName', 'interests': interests};
   }
 
-  // Full local representation (used internally if needed)
+  // local representation (used internally if needed)
   Map<String, dynamic> toMap() {
     return {
       'firstName': firstName,
@@ -59,7 +58,6 @@ class UserModel {
       interests: List<String>.from(prefs['interests'] ?? []),
       travelType: prefs['travelType'] as String? ?? '',
       budget: prefs['budget'] as String? ?? '',
-      // createdAt comes as ISO string from REST, not a Firestore Timestamp
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'] as String)
           : DateTime.now(),

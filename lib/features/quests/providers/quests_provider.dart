@@ -47,4 +47,9 @@ class QuestProvider extends ChangeNotifier {
     if (completedQuestIds.contains(questId)) return QuestStatus.achieved;
     return QuestStatus.toBeAchieved;
   }
+
+  // Returns only completed quests to show as badges in profile
+  List<QuestModel> get completedQuestBadges {
+    return allQuests.where((q) => completedQuestIds.contains(q.id)).toList();
+  }
 }

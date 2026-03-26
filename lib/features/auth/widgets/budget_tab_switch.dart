@@ -15,23 +15,22 @@ class BudgetTabSwitch extends StatefulWidget {
 }
 
 class _BudgetTabSwitchState extends State<BudgetTabSwitch> {
-  int _selectedIndex = 1; // Default to "Medium"
+  int _selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width * 0.8; // Adjust as needed
+    double width = MediaQuery.of(context).size.width * 0.8;
 
     return Container(
       width: width,
       height: 60,
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: const Color(0xFFEDF4F6), // Light blue-grey background
+        color: const Color(0xFFEDF4F6),
         borderRadius: BorderRadius.circular(30),
       ),
       child: Stack(
         children: [
-          // The Animated Sliding Background
           AnimatedAlign(
             duration: const Duration(milliseconds: 250),
             curve: Curves.easeInOut,
@@ -55,7 +54,7 @@ class _BudgetTabSwitchState extends State<BudgetTabSwitch> {
               ),
             ),
           ),
-          // The Text Labels
+
           Row(
             children: List.generate(
               widget.values.length,

@@ -8,9 +8,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TripDetailsScreen extends StatelessWidget {
-  final TripModel trip;
-
-  const TripDetailsScreen({super.key, required this.trip});
+  const TripDetailsScreen({super.key});
 
   Future<void> _launchMapsForStop(StopModel stop) async {
     final url = Uri.parse(
@@ -45,6 +43,16 @@ class TripDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final trip = args?['trip'] as TripModel?;
+
+    if (trip == null) {
+      return const Scaffold(
+        body: Center(child: Text('No trip found')),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppColors.bottomNavBackground,
 
@@ -204,8 +212,7 @@ class TripDetailsScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) =>
-                                      TripStarterScreen(trip: trip),
+                                  builder: (_) => TripStarterScreen(trip: trip),
                                 ),
                               );
                             }

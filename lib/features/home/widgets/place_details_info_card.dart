@@ -41,10 +41,7 @@ class PlaceDetailsInfoCard extends StatelessWidget {
       ),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-          vertical: 16,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -89,8 +86,13 @@ class PlaceDetailsInfoCard extends StatelessWidget {
                       builder: (context, provider, child) {
                         final isFav = provider.isFavorite(id);
                         return GestureDetector(
-                          onTap: () => context.read<WishlistProvider>().toggleFavorite(id),
-                          child: _buildActionButton(isFav ? Icons.favorite : Icons.favorite_border, isFav ? Colors.red : null),
+                          onTap: () => context
+                              .read<WishlistProvider>()
+                              .toggleFavorite(id),
+                          child: _buildActionButton(
+                            isFav ? Icons.favorite : Icons.favorite_border,
+                            isFav ? Colors.red : null,
+                          ),
                         );
                       },
                     ),
@@ -123,24 +125,14 @@ class PlaceDetailsInfoCard extends StatelessWidget {
               children: [
                 Text(
                   '$category in $location',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.grey.shade600,
-                  ),
+                  style: TextStyle(fontSize: 15, color: Colors.grey.shade600),
                 ),
                 const SizedBox(width: 12),
-                Icon(
-                  Icons.near_me,
-                  size: 16,
-                  color: Colors.grey.shade600,
-                ),
+                Icon(Icons.near_me, size: 16, color: Colors.grey.shade600),
                 const SizedBox(width: 4),
                 Text(
                   distance,
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.grey.shade600,
-                  ),
+                  style: TextStyle(fontSize: 15, color: Colors.grey.shade600),
                 ),
               ],
             ),
@@ -152,11 +144,7 @@ class PlaceDetailsInfoCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(
-                      Icons.star,
-                      color: Colors.grey,
-                      size: 18,
-                    ),
+                    const Icon(Icons.star, color: Colors.grey, size: 18),
                     const SizedBox(width: 4),
                     Text(
                       '$rating ($reviewsCount)',
@@ -169,11 +157,7 @@ class PlaceDetailsInfoCard extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    const Icon(
-                      Icons.access_time,
-                      color: Colors.grey,
-                      size: 18,
-                    ),
+                    const Icon(Icons.access_time, color: Colors.grey, size: 18),
                     const SizedBox(width: 4),
                     Text(
                       '5:30 AM - 8:00 PM',
@@ -265,9 +249,11 @@ class PlaceDetailsInfoCard extends StatelessWidget {
       ),
       child: Icon(
         icon,
-        color: color ?? (icon == Icons.favorite
-            ? Colors.grey.shade400
-            : Colors.grey.shade700),
+        color:
+            color ??
+            (icon == Icons.favorite
+                ? Colors.grey.shade400
+                : Colors.grey.shade700),
         size: 20,
       ), // Favorite icon is grey in design until filled
     );

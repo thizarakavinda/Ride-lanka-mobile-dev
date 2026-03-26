@@ -3,7 +3,12 @@ import 'package:ride_lanka/core/constants/app_colors.dart';
 
 class CustomSearchBar extends StatelessWidget {
   final String searchBoxHint;
-  const CustomSearchBar({super.key, required this.searchBoxHint});
+  final ValueChanged<String>? onChanged;
+  const CustomSearchBar({
+    super.key,
+    required this.searchBoxHint,
+    this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +24,10 @@ class CustomSearchBar extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+              onTapOutside: (event) {
+                FocusScope.of(context).unfocus();
+              },
+              onChanged: onChanged,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(left: 10, top: 13),
                 prefixIcon: const Icon(Icons.search),

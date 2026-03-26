@@ -3,6 +3,7 @@ import 'package:ride_lanka/features/auth/screens/login_screen.dart';
 import 'package:ride_lanka/features/auth/screens/meta_data_screen.dart';
 import 'package:ride_lanka/features/auth/screens/password_reset_screen.dart';
 import 'package:ride_lanka/features/auth/screens/register_screen.dart';
+import 'package:ride_lanka/features/edit%20profile/screens/edit_profile_screen.dart';
 import 'package:ride_lanka/features/home/screens/main_home.dart';
 import 'package:ride_lanka/features/badges/screens/badges_info.dart';
 import 'package:ride_lanka/features/home/screens/place_details.dart';
@@ -13,6 +14,7 @@ import 'package:ride_lanka/features/splash/screens/splash_screen.dart';
 import 'package:ride_lanka/features/trip%20history/screens/trip_history.dart';
 import 'package:ride_lanka/features/trip/screens/new_trip_screen.dart';
 import 'package:ride_lanka/features/trip/screens/trip_plan_screen.dart';
+import 'package:ride_lanka/features/trip/screens/trip_details_screen.dart';
 import 'package:ride_lanka/features/wishlist/screens/wishlist_screen.dart';
 import 'package:ride_lanka/home_bottom_nav.dart';
 
@@ -35,6 +37,8 @@ class AppRoutes {
   static const String tripHistory = '/history';
   static const String placeDetails = '/placeDetails';
   static const String newTrpPlanScreen = '/newTripPlanScreen';
+  static const String editProfile = '/edit-profile';
+  static const String tripDetails = '/tripDetails';
 
   static Map<String, WidgetBuilder> routes = {
     splash: (context) => const SplashScreen(),
@@ -53,5 +57,7 @@ class AppRoutes {
     tripHistory: (context) => const TripHistory(),
     placeDetails: (context) => const PlaceDetails(),
     newTrpPlanScreen: (context) => const NewTripScreen(),
+    editProfile: (context) => const EditProfileScreen(),
+    tripDetails: (context) => const TripDetailsScreen(),
   };
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ride_lanka/features/trip/providers/trip_provider.dart';
-import 'package:ride_lanka/features/trip/screens/trip_details_screen.dart';
 import 'package:ride_lanka/routes/app_routes.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -68,6 +67,7 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text(
           'Trips Planner',
@@ -90,27 +90,25 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
       body: Consumer<TripProvider>(
         builder: (context, provider, child) {
           if (provider.isLoadingTrips) {
-            return Expanded(
-              child: ListView.builder(
-                itemCount: 5,
-                padding: EdgeInsets.zero,
-                itemBuilder: (context, index) {
-                  return Shimmer.fromColors(
-                    baseColor: Colors.grey.shade300,
-                    highlightColor: Colors.grey.shade100,
-                    child: Card(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Container(height: 110, width: double.infinity),
+            return ListView.builder(
+              itemCount: 5,
+              padding: EdgeInsets.zero,
+              itemBuilder: (context, index) {
+                return Shimmer.fromColors(
+                  baseColor: Colors.grey.shade300,
+                  highlightColor: Colors.grey.shade100,
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
                     ),
-                  );
-                },
-              ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Container(height: 110, width: double.infinity),
+                  ),
+                );
+              },
             );
           }
 
@@ -296,14 +294,10 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
                                             16,
                                           ),
                                           onTap: () {
-                                            Navigator.push(
+                                            Navigator.pushNamed(
                                               context,
-                                              MaterialPageRoute(
-                                                builder: (_) =>
-                                                    TripDetailsScreen(
-                                                      trip: trip,
-                                                    ),
-                                              ),
+                                              AppRoutes.tripDetails,
+                                              arguments: {'trip': trip},
                                             );
                                           },
                                           child: Padding(
@@ -383,14 +377,43 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
                                                         ),
                                                       ),
                                                       const SizedBox(height: 4),
-                                                      Text(
-                                                        ' ${trip.tripDate} | ${trip.stopCount} stops',
-                                                        style: TextStyle(
-                                                          color: Colors
-                                                              .grey
-                                                              .shade600,
-                                                          fontSize: 13,
-                                                        ),
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons
+                                                                .calendar_month,
+                                                            size: 16,
+                                                            color: AppColors
+                                                                .forgotPasswordText,
+                                                          ),
+                                                          Text(
+                                                            ' ${trip.tripDate}',
+                                                            style: TextStyle(
+                                                              color: Colors
+                                                                  .grey
+                                                                  .shade600,
+                                                              fontSize: 13,
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 4,
+                                                          ),
+                                                          Icon(
+                                                            Icons.location_on,
+                                                            size: 16,
+                                                            color: AppColors
+                                                                .favoriteColor,
+                                                          ),
+                                                          Text(
+                                                            '${trip.stopCount} stops',
+                                                            style: TextStyle(
+                                                              color: Colors
+                                                                  .grey
+                                                                  .shade600,
+                                                              fontSize: 13,
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                       const SizedBox(height: 8),
                                                       Container(

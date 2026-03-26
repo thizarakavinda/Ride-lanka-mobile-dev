@@ -57,7 +57,6 @@ class DatePicker extends StatelessWidget {
             suffixIcon: Icon(Icons.event, color: AppColors.grey),
           ),
           onTap: () async {
-            // Only date part to prevent time issues
             final today = DateTime.now();
             final lastDate = DateTime(today.year, today.month, today.day);
 

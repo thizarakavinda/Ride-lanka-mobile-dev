@@ -62,7 +62,22 @@ class NearbyPlaceCard extends StatelessWidget {
               top: 12,
               right: 12,
               child: GestureDetector(
-                onTap: () => context.read<WishlistProvider>().toggleFavorite(place.id),
+                onTap: () {
+                  context.read<WishlistProvider>().toggleFavorite(place.id);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content:
+                          context.read<WishlistProvider>().isFavorite(place.id)
+                          ? Text('${place.title} added to wishlist')
+                          : Text('${place.title} removed from wishlist'),
+                      backgroundColor: AppColors.lowPrimaryColor,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  );
+                },
                 child: CircleAvatar(
                   backgroundColor: Colors.black26,
                   child: Consumer<WishlistProvider>(
@@ -70,7 +85,9 @@ class NearbyPlaceCard extends StatelessWidget {
                       final isFav = provider.isFavorite(place.id);
                       return Icon(
                         isFav ? Icons.favorite : Icons.favorite_border,
-                        color: isFav ? AppColors.favoriteColor : AppColors.white,
+                        color: isFav
+                            ? AppColors.favoriteColor
+                            : AppColors.white,
                       );
                     },
                   ),

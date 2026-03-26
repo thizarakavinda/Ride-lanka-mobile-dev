@@ -133,16 +133,19 @@ class _WishlistScreenState extends State<WishlistScreen> {
     final displayList = uniqueFavoritesMap.values.toList();
 
     return Scaffold(
-      backgroundColor: AppColors.bottomNavBackground,
+      backgroundColor: AppColors.white,
       body: SafeArea(
+        top: false,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Wishlist',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+              SafeArea(
+                child: const Text(
+                  'Wishlist',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                ),
               ),
               const SizedBox(height: 20),
               CustomSearchBar(searchBoxHint: 'Search Wishlist'),
@@ -158,7 +161,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
               const SizedBox(height: 20),
               if (homeProvider.isLoading || wishlistProvider.isLoading)
                 const Expanded(
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.lowPrimaryColor,
+                    ),
+                  ),
                 )
               else if (displayList.isEmpty)
                 const Expanded(
