@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:ride_lanka/core/constants/app_assets.dart';
 import 'package:ride_lanka/core/constants/app_colors.dart';
@@ -14,7 +15,6 @@ class _LandScreenState extends State<LandScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     final bool isTablet = size.width > 600;
 
     return Scaffold(
@@ -29,31 +29,81 @@ class _LandScreenState extends State<LandScreen> {
             ),
           ),
 
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: const [0.0, 0.4, 0.8, 1.0],
+                  colors: [
+                    Colors.black.withOpacity(0.4),
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.2),
+                    Colors.black.withOpacity(0.6),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
           SafeArea(
             child: Column(
               children: [
-                SizedBox(height: size.height * 0.25),
-
-                Column(
-                  children: [
-                    Center(
-                      child: Image.asset(
-                        AppAssets.logo,
-                        color: AppColors.black,
-                        width: isTablet ? 70 : 50,
+                const SizedBox(height: 60),
+                Center(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(18),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 15,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: Image.asset(
+                          AppAssets.logo,
+                          color: AppColors.primaryColor,
+                          width: isTablet ? 70 : 45,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Ride\nLanka',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
+                      const SizedBox(height: 20),
+                      Text(
+                        'RIDE LANKA',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: isTablet ? 32 : 26,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 4.0,
+                          height: 1.2,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black.withOpacity(0.5),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 10),
+                      Text(
+                        'DISCOVER THE PEARL',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 2.0,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -61,54 +111,107 @@ class _LandScreenState extends State<LandScreen> {
 
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              width: double.infinity,
-              height: size.height * 0.32,
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              decoration: const BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
-              ),
-              child: SafeArea(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      'Ready to Discover\n Sri Lanka?',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: isTablet ? 38 : 34,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primaryColor,
-                        fontFamily: 'Helvetica',
-                      ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(35),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 30,
                     ),
-
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, AppRoutes.login);
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        height: 55,
-                        decoration: BoxDecoration(
-                          color: AppColors.lowPrimaryColor,
-                          borderRadius: BorderRadius.circular(30),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.85),
+                      borderRadius: BorderRadius.circular(35),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.3),
+                        width: 1.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
                         ),
-                        child: const Center(
-                          child: Text(
-                            'Your journey starts here',
-                            style: TextStyle(
-                              color: AppColors.white,
-                              fontFamily: 'Helvetica1',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Ready to Discover\nSri Lanka?',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: isTablet ? 36 : 28,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.primaryColor,
+                            height: 1.2,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 25),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, AppRoutes.login);
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [
+                                  AppColors.lowPrimaryColor,
+                                  AppColors.primaryColor,
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primaryColor.withOpacity(
+                                    0.4,
+                                  ),
+                                  blurRadius: 15,
+                                  offset: const Offset(0, 8),
+                                ),
+                              ],
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'LET\'S GET STARTED',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 14,
+                                    letterSpacing: 1.5,
+                                  ),
+                                ),
+                                SizedBox(width: 12),
+                                Icon(
+                                  Icons.arrow_forward_rounded,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Experience the journey of a lifetime',
+                          style: TextStyle(
+                            color: AppColors.primaryColor.withOpacity(0.6),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),

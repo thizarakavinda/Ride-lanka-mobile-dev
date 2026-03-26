@@ -6,7 +6,8 @@
     <application
         android:label="ride_lanka"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -30,12 +31,24 @@
             android:value="2" />
             
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA0TRqL_6sdrhOAjlCdc7zWrBCmDOaQDgs"/>
+            android:value="${MAPS_API_KEY}"/>
     </application>
     <queries>
+        <!-- For url_launcher navigation and web links -->
         <intent>
-            <action android:name="android.intent.action.PROCESS_TEXT"/>
-            <data android:mimeType="text/plain"/>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="google.navigation" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
         </intent>
     </queries>
 </manifest>

@@ -11,6 +11,8 @@ class CustomTextfield extends StatefulWidget {
   
   final TextInputType? keyboardType;
   final TextEditingController? controller;
+  final TextInputAction? textInputAction;
+  final String? Function(String?)? validator;
   const CustomTextfield({
     super.key,
     required this.labelText,
@@ -19,6 +21,8 @@ class CustomTextfield extends StatefulWidget {
     this.enabled = true,
     this.keyboardType,
     this.controller,
+    this.textInputAction,
+    this.validator,
   });
 
   @override
@@ -43,13 +47,14 @@ class _CustomTextfieldState extends State<CustomTextfield> {
         ),
         const SizedBox(height: 8),
         TextFormField(
-          style: TextStyle(fontSize: 14),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           keyboardType: widget.keyboardType,
           controller: widget.controller,
           enabled: widget.enabled,
           obscureText: widget.isPassword && _isObscure,
+          textInputAction: widget.textInputAction,
           onTapOutside: (event) => FocusScope.of(context).unfocus(),
-          validator: (value) {
+          validator: widget.validator ?? (value) {
             if (value == null || value.isEmpty) {
               if (widget.labelText == 'First Name' ||
                   widget.labelText == 'Last Name') {
@@ -72,38 +77,38 @@ class _CustomTextfieldState extends State<CustomTextfield> {
             return null;
           },
           decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.grey.withOpacity(0.05),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
-              vertical: 5,
+              vertical: 14,
             ),
-
             disabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.buttonBorder, width: 1.5),
-              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.buttonBorder, width: 1),
+              borderRadius: BorderRadius.circular(15),
             ),
-
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.buttonBorder, width: 1.5),
-              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.buttonBorder, width: 1),
+              borderRadius: BorderRadius.circular(15),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.buttonBorder, width: 2),
-              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.primaryColor, width: 1.5),
+              borderRadius: BorderRadius.circular(15),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.red),
-              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.redAccent, width: 1),
+              borderRadius: BorderRadius.circular(15),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.red, width: 2),
-              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
+              borderRadius: BorderRadius.circular(15),
             ),
-
             suffixIcon: widget.isPassword
                 ? IconButton(
                     icon: Icon(
-                      _isObscure ? Icons.visibility_off : Icons.visibility,
+                      _isObscure ? Icons.visibility_off_rounded : Icons.visibility_rounded,
                       color: AppColors.grey,
+                      size: 20,
                     ),
                     onPressed: () {
                       setState(() => _isObscure = !_isObscure);

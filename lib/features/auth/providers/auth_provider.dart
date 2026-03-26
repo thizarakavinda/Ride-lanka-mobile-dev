@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:ride_lanka/core/constants/app_dialogs.dart';
-import 'package:ride_lanka/core/utils/validators.dart';
 import 'package:ride_lanka/features/auth/services/auth_service.dart';
 import 'package:ride_lanka/routes/app_routes.dart';
 
@@ -58,28 +57,6 @@ class AuthController extends ChangeNotifier {
 
   Future<void> signUp(BuildContext context) async {
     try {
-      if (Validators.isEmpty(_firstNameController.text) ||
-          Validators.isEmpty(_lastNameController.text) ||
-          Validators.isEmpty(_emailController.text) ||
-          Validators.isEmpty(_dobController.text) ||
-          Validators.isEmpty(_phoneNumberController.text) ||
-          Validators.isEmpty(_passwordController.text) ||
-          Validators.isEmpty(_confirmPasswordController.text)) {
-        throw Exception('Please fill all fields');
-      }
-      if (!Validators.isValidEmail(_emailController.text)) {
-        throw Exception('Invalid email');
-      }
-      if (!Validators.isValidPassword(_passwordController.text)) {
-        throw Exception('Weak password');
-      }
-      if (!Validators.doPasswordsMatch(
-        _passwordController.text,
-        _confirmPasswordController.text,
-      )) {
-        throw Exception('Passwords do not match');
-      }
-
       _isLoading = true;
       notifyListeners();
 
@@ -111,14 +88,6 @@ class AuthController extends ChangeNotifier {
 
   Future<void> signIn(BuildContext context) async {
     try {
-      if (Validators.isEmpty(_emailController.text) ||
-          Validators.isEmpty(_passwordController.text)) {
-        throw Exception('Please fill all fields');
-      }
-      if (!Validators.isValidEmail(_emailController.text)) {
-        throw Exception('Invalid email');
-      }
-
       _isLoading = true;
       notifyListeners();
 
