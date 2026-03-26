@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:ride_lanka/core/constants/app_dialogs.dart';
@@ -76,9 +80,13 @@ class AuthController extends ChangeNotifier {
     } catch (e) {
       Logger().e('signUp error: $e');
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(e.toString())));
+        if (e is SocketException ||
+            e is TimeoutException ||
+            (e is FirebaseAuthException && e.code == 'network-request-failed')) {
+          AppDialogs.networkErrorDialog(context);
+        } else {
+          AppDialogs.registerFailedDialog(context);
+        }
       }
     } finally {
       _isLoading = false;
@@ -112,7 +120,13 @@ class AuthController extends ChangeNotifier {
     } catch (e) {
       Logger().e('signIn error: $e');
       if (context.mounted) {
-        AppDialogs.loginErrorDialog(context);
+        if (e is SocketException ||
+            e is TimeoutException ||
+            (e is FirebaseAuthException && e.code == 'network-request-failed')) {
+          AppDialogs.networkErrorDialog(context);
+        } else {
+          AppDialogs.loginErrorDialog(context);
+        }
       }
     } finally {
       _isLoading = false;
@@ -130,9 +144,13 @@ class AuthController extends ChangeNotifier {
     } catch (e) {
       Logger().e('signOut error: $e');
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(e.toString())));
+        if (e is SocketException || e is TimeoutException) {
+          AppDialogs.networkErrorDialog(context);
+        } else {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(e.toString())));
+        }
       }
     }
   }

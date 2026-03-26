@@ -135,4 +135,29 @@ class AppDialogs {
       },
     );
   }
+
+  static void networkErrorDialog(BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierLabel: '',
+      transitionDuration: const Duration(milliseconds: 400),
+      pageBuilder: (context, anim1, anim2) {
+        return Center(
+          child: CustomAlerts(
+            alertTitle: 'Connection Error',
+            subTitle: 'Please check your internet connection and try again.',
+            buttonText: 'Try Again',
+            onPressed: () => Navigator.pop(context),
+          ),
+        );
+      },
+      transitionBuilder: (context, anim1, anim2, child) {
+        return Transform.scale(
+          scale: Curves.easeInOut.transform(anim1.value),
+          child: FadeTransition(opacity: anim1, child: child),
+        );
+      },
+    );
+  }
 }

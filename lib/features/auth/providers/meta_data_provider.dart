@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
@@ -83,7 +86,13 @@ class MetaDataProvider extends ChangeNotifier {
       Logger().e('saveUser error: $e');
       _isLoading = false;
       notifyListeners();
-      if (context.mounted) AppDialogs.registerFailedDialog(context);
+      if (context.mounted) {
+        if (e is SocketException || e is TimeoutException) {
+          AppDialogs.networkErrorDialog(context);
+        } else {
+          AppDialogs.registerFailedDialog(context);
+        }
+      }
     }
   }
 }

@@ -15,6 +15,9 @@ class AuthService {
           .createUserWithEmailAndPassword(email: email, password: password);
       return credential.user;
     } on FirebaseAuthException catch (e) {
+      if (e.code == 'network-request-failed') {
+        rethrow;
+      }
       if (e.code == 'weak-password') {
         Logger().e('Weak password');
       } else if (e.code == 'email-already-in-use') {
@@ -76,6 +79,9 @@ class AuthService {
       );
       return credential.user;
     } on FirebaseAuthException catch (e) {
+      if (e.code == 'network-request-failed') {
+        rethrow;
+      }
       if (e.code == 'invalid-credential') {
         return null;
       } else {
