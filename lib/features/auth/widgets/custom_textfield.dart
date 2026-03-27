@@ -8,7 +8,7 @@ class CustomTextfield extends StatefulWidget {
   final bool isPassword;
   final bool isRegister;
   final bool enabled;
-  
+
   final TextInputType? keyboardType;
   final TextEditingController? controller;
   final TextInputAction? textInputAction;
@@ -54,28 +54,30 @@ class _CustomTextfieldState extends State<CustomTextfield> {
           obscureText: widget.isPassword && _isObscure,
           textInputAction: widget.textInputAction,
           onTapOutside: (event) => FocusScope.of(context).unfocus(),
-          validator: widget.validator ?? (value) {
-            if (value == null || value.isEmpty) {
-              if (widget.labelText == 'First Name' ||
-                  widget.labelText == 'Last Name') {
-                return "Required field";
-              }
+          validator:
+              widget.validator ??
+              (value) {
+                if (value == null || value.isEmpty) {
+                  if (widget.labelText == 'First Name' ||
+                      widget.labelText == 'Last Name') {
+                    return "Required field";
+                  }
 
-              return "${widget.labelText} is required";
-            }
+                  return "${widget.labelText} is required";
+                }
 
-            if (widget.labelText == "Email" &&
-                !Validators.isValidEmail(value)) {
-              return "Enter a valid email";
-            }
+                if (widget.labelText == "Email" &&
+                    !Validators.isValidEmail(value)) {
+                  return "Enter a valid email";
+                }
 
-            if (widget.labelText == "Password" &&
-                !Validators.isValidPassword(value)) {
-              return "Password must be stronger";
-            }
+                if (widget.labelText == "Password" &&
+                    !Validators.isValidPassword(value)) {
+                  return "Password must be stronger";
+                }
 
-            return null;
-          },
+                return null;
+              },
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.grey.withOpacity(0.05),
@@ -84,15 +86,24 @@ class _CustomTextfieldState extends State<CustomTextfield> {
               vertical: 14,
             ),
             disabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: AppColors.buttonBorder, width: 1),
+              borderSide: const BorderSide(
+                color: AppColors.buttonBorder,
+                width: 1,
+              ),
               borderRadius: BorderRadius.circular(15),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: AppColors.buttonBorder, width: 1),
+              borderSide: const BorderSide(
+                color: AppColors.buttonBorder,
+                width: 1,
+              ),
               borderRadius: BorderRadius.circular(15),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: AppColors.primaryColor, width: 1.5),
+              borderSide: const BorderSide(
+                color: AppColors.primaryColor,
+                width: 1.5,
+              ),
               borderRadius: BorderRadius.circular(15),
             ),
             errorBorder: OutlineInputBorder(
@@ -106,7 +117,9 @@ class _CustomTextfieldState extends State<CustomTextfield> {
             suffixIcon: widget.isPassword
                 ? IconButton(
                     icon: Icon(
-                      _isObscure ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                      _isObscure
+                          ? Icons.visibility_off_rounded
+                          : Icons.visibility_rounded,
                       color: AppColors.grey,
                       size: 20,
                     ),

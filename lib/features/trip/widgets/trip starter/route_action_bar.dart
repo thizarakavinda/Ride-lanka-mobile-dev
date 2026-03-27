@@ -30,10 +30,7 @@ class RouteActionBar extends StatelessWidget {
                 height: 58,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [
-                      AppColors.primaryColor,
-                      AppColors.lowPrimaryColor
-                    ],
+                    colors: [AppColors.primaryColor, AppColors.lowPrimaryColor],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                   ),
@@ -49,8 +46,11 @@ class RouteActionBar extends StatelessWidget {
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.auto_awesome_motion_rounded,
-                        color: Colors.white, size: 22),
+                    Icon(
+                      Icons.auto_awesome_motion_rounded,
+                      color: Colors.white,
+                      size: 22,
+                    ),
                     SizedBox(width: 10),
                     Text(
                       'Start Full Journey',
@@ -83,14 +83,16 @@ class RouteActionBar extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(18),
-                    border:
-                        Border.all(color: Colors.grey.shade200, width: 2),
+                    border: Border.all(color: Colors.grey.shade200, width: 2),
                   ),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.done_all_rounded,
-                          color: Colors.green, size: 20),
+                      Icon(
+                        Icons.done_all_rounded,
+                        color: Colors.green,
+                        size: 20,
+                      ),
                       SizedBox(width: 6),
                       Text(
                         'Done',

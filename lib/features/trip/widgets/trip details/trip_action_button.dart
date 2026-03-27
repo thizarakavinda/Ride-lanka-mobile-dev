@@ -33,9 +33,10 @@ class TripActionButton extends StatelessWidget {
                 Text(
                   'Trip Completed',
                   style: TextStyle(
-                      color: Colors.blueGrey,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15),
+                    color: Colors.blueGrey,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                  ),
                 ),
               ],
             ),
@@ -47,10 +48,12 @@ class TripActionButton extends StatelessWidget {
           height: 50,
           child: ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  isActive ? Colors.green : AppColors.lowPrimaryColor,
+              backgroundColor: isActive
+                  ? Colors.green
+                  : AppColors.lowPrimaryColor,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14)),
+                borderRadius: BorderRadius.circular(14),
+              ),
               elevation: 0,
             ),
             icon: Icon(
@@ -61,9 +64,10 @@ class TripActionButton extends StatelessWidget {
             label: Text(
               isActive ? 'Mark as Completed' : 'Start Trip',
               style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15),
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
             ),
             onPressed: () {
               if (isActive) {

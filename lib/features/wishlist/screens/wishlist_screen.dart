@@ -182,61 +182,62 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 )
               else
                 Expanded(
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    await Future.wait([
-                      homeProvider.fetchHomeData(force: true),
-                      wishlistProvider.loadFavorites(force: true),
-                    ]);
-                  },
-                  color: AppColors.primaryColor,
-                  child: displayList.isEmpty
-                      ? ListView(
-                          physics: const AlwaysScrollableScrollPhysics(
-                            parent: BouncingScrollPhysics(),
-                          ),
-                          children: [
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.4,
-                              child: const Center(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.favorite_border,
-                                      size: 60,
-                                      color: AppColors.grey,
-                                    ),
-                                    SizedBox(height: 12),
-                                    Text(
-                                      'No wishlist yet',
-                                      style: TextStyle(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await Future.wait([
+                        homeProvider.fetchHomeData(force: true),
+                        wishlistProvider.loadFavorites(force: true),
+                      ]);
+                    },
+                    color: AppColors.primaryColor,
+                    child: displayList.isEmpty
+                        ? ListView(
+                            physics: const AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics(),
+                            ),
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
+                                child: const Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.favorite_border,
+                                        size: 60,
                                         color: AppColors.grey,
-                                        fontSize: 16,
                                       ),
-                                    ),
-                                  ],
+                                      SizedBox(height: 12),
+                                      Text(
+                                        'No wishlist yet',
+                                        style: TextStyle(
+                                          color: AppColors.grey,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
+                            ],
+                          )
+                        : ListView.separated(
+                            physics: const AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics(),
                             ),
-                          ],
-                        )
-                      : ListView.separated(
-                          physics: const AlwaysScrollableScrollPhysics(
-                            parent: BouncingScrollPhysics(),
+                            itemCount: displayList.length,
+                            separatorBuilder: (_, __) =>
+                                const SizedBox(height: 12),
+                            itemBuilder: (context, index) {
+                              return PopularPlaceCard(
+                                isWishlist: true,
+                                place: displayList[index],
+                              );
+                            },
                           ),
-                          itemCount: displayList.length,
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(height: 12),
-                          itemBuilder: (context, index) {
-                            return PopularPlaceCard(
-                              isWishlist: true,
-                              place: displayList[index],
-                            );
-                          },
-                        ),
+                  ),
                 ),
-              ),
             ],
           ),
         ),

@@ -32,7 +32,6 @@ class PlaceDetailsInfoCard extends StatelessWidget {
     required this.isLoadingMap,
   });
 
-
   @override
   Widget build(BuildContext context) {
     return Container(

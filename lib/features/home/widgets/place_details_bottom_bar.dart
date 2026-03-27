@@ -20,10 +20,7 @@ class PlaceDetailsBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 90,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 24,
-        vertical: 12,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
         color: const Color(0xFFF7F7F9),
         border: Border(top: BorderSide(color: Colors.grey.shade300)),
@@ -71,11 +68,7 @@ class PlaceDetailsBottomBar extends StatelessWidget {
                 const SizedBox(height: 2),
                 Row(
                   children: [
-                    const Icon(
-                      Icons.star,
-                      color: Colors.grey,
-                      size: 14,
-                    ),
+                    const Icon(Icons.star, color: Colors.grey, size: 14),
                     const SizedBox(width: 2),
                     Text(
                       '$rating ($reviewsCount)',
@@ -85,11 +78,7 @@ class PlaceDetailsBottomBar extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Icon(
-                      Icons.near_me,
-                      size: 14,
-                      color: Colors.grey.shade600,
-                    ),
+                    Icon(Icons.near_me, size: 14, color: Colors.grey.shade600),
                     const SizedBox(width: 2),
                     Text(
                       distance,
@@ -113,10 +102,7 @@ class PlaceDetailsBottomBar extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),
               ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               elevation: 0,
             ),
             child: const Text(

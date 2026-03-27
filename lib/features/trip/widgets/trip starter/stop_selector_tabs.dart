@@ -29,12 +29,9 @@ class StopSelectorTabs extends StatelessWidget {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 250),
               margin: const EdgeInsets.only(right: 10),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               decoration: BoxDecoration(
-                color: isActive
-                    ? AppColors.primaryColor
-                    : Colors.grey.shade50,
+                color: isActive ? AppColors.primaryColor : Colors.grey.shade50,
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
                   color: isActive
@@ -56,19 +53,18 @@ class StopSelectorTabs extends StatelessWidget {
                   if (isActive)
                     const Padding(
                       padding: EdgeInsets.only(right: 6),
-                      child: Icon(Icons.check_circle,
-                          size: 14, color: Colors.white),
+                      child: Icon(
+                        Icons.check_circle,
+                        size: 14,
+                        color: Colors.white,
+                      ),
                     ),
                   Text(
                     'Stop ${stops[i].stopOrder}',
                     style: TextStyle(
                       fontSize: 12,
-                      fontWeight: isActive
-                          ? FontWeight.w700
-                          : FontWeight.w500,
-                      color: isActive
-                          ? Colors.white
-                          : Colors.grey.shade700,
+                      fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+                      color: isActive ? Colors.white : Colors.grey.shade700,
                     ),
                   ),
                 ],

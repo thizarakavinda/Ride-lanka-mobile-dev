@@ -28,15 +28,15 @@ class TripFilterChips extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 18, vertical: 10),
+                  horizontal: 18,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.primaryColor
                       : Colors.transparent,
                   border: Border.all(
-                    color: isSelected
-                        ? AppColors.primaryColor
-                        : AppColors.grey,
+                    color: isSelected ? AppColors.primaryColor : AppColors.grey,
                   ),
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -44,9 +44,7 @@ class TripFilterChips extends StatelessWidget {
                   filter,
                   style: TextStyle(
                     fontSize: 14,
-                    fontWeight: isSelected
-                        ? FontWeight.w600
-                        : FontWeight.w400,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                     color: isSelected
                         ? Colors.white
                         : const Color.fromARGB(255, 90, 90, 90),

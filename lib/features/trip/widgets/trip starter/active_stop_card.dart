@@ -81,9 +81,10 @@ class ActiveStopCard extends StatelessWidget {
                   Text(
                     stop.description,
                     style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 12,
-                        height: 1.3),
+                      color: Colors.grey.shade600,
+                      fontSize: 12,
+                      height: 1.3,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -106,8 +107,11 @@ class ActiveStopCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: const Icon(Icons.near_me_rounded,
-                    color: Colors.white, size: 22),
+                child: const Icon(
+                  Icons.near_me_rounded,
+                  color: Colors.white,
+                  size: 22,
+                ),
               ),
             ),
           ],

@@ -203,17 +203,16 @@ class _TripPlanScreenState extends State<TripPlanScreen> {
                                     ),
                                   )
                                 : RefreshIndicator(
-                                    onRefresh: () => provider.fetchUserTrips(
-                                      force: true,
-                                    ),
+                                    onRefresh: () =>
+                                        provider.fetchUserTrips(force: true),
                                     color: AppColors.primaryColor,
                                     child: ListView.builder(
                                       itemCount: displayedTrips.length,
                                       padding: const EdgeInsets.only(top: 0),
                                       physics:
                                           const AlwaysScrollableScrollPhysics(
-                                        parent: BouncingScrollPhysics(),
-                                      ),
+                                            parent: BouncingScrollPhysics(),
+                                          ),
                                       itemBuilder: (context, index) {
                                         final trip = displayedTrips[index];
                                         return TripListCard(

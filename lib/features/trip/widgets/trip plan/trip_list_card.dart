@@ -38,7 +38,10 @@ class TripListCard extends StatelessWidget {
                       baseColor: Colors.grey.shade300,
                       highlightColor: Colors.grey.shade100,
                       child: Container(
-                          height: 80, width: 80, color: Colors.white),
+                        height: 80,
+                        width: 80,
+                        color: Colors.white,
+                      ),
                     );
                   },
                   errorBuilder: (_, __, ___) => Image.asset(
@@ -57,32 +60,46 @@ class TripListCard extends StatelessWidget {
                     Text(
                       trip.tripName,
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(Icons.calendar_month,
-                            size: 16, color: AppColors.forgotPasswordText),
+                        Icon(
+                          Icons.calendar_month,
+                          size: 16,
+                          color: AppColors.forgotPasswordText,
+                        ),
                         Text(
                           ' ${trip.tripDate}',
                           style: TextStyle(
-                              color: Colors.grey.shade600, fontSize: 13),
+                            color: Colors.grey.shade600,
+                            fontSize: 13,
+                          ),
                         ),
                         const SizedBox(width: 4),
-                        Icon(Icons.location_on,
-                            size: 16, color: AppColors.favoriteColor),
+                        Icon(
+                          Icons.location_on,
+                          size: 16,
+                          color: AppColors.favoriteColor,
+                        ),
                         Text(
                           '${trip.stopCount} stops',
                           style: TextStyle(
-                              color: Colors.grey.shade600, fontSize: 13),
+                            color: Colors.grey.shade600,
+                            fontSize: 13,
+                          ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: trip.status == 'Active'
                             ? Colors.green
